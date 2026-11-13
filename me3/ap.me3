@@ -1,0 +1,13 @@
+profileVersion = "v1"
+savefile = "AP_me3.sl2"
+disable_arxan = true
+mem_patch = false
+
+[[supports]]
+game = "eldenring"
+
+[[natives]]
+path = 'eldenring_archipelago.dll'
+
+[[natives]]
+path = "MapForGoblins.dll"

@@ -1,0 +1,503 @@
+# Getting unstuck with the rescue console
+
+The client has a rescue console that works even while disconnected. Use it when a bad warp,
+missing grace, or progression edge has left the character somewhere the normal map cannot fix.
+These commands change live game state, so make a save backup first and use only the specific flag
+you mean to change.
+
+## Open the console
+
+1. Press **F5** if the Archipelago overlay is hidden.
+2. Choose **Console** from the overlay menu.
+3. Type a command and press Enter. Results appear in the main overlay log.
+
+Type `!help` to see the command list shipped by your client.
+
+## Incoming items crash during auto-equip
+
+On a client containing the auto-equip recovery update, launch disconnected, open
+the console, and enter `!autoequip off` **before connecting**. Then connect: items
+still arrive, but automatic equipment changes, Physick mixing, spell memorization,
+and starting-loadout normalization are disabled. This also discards any queued
+equip requests; it does not discard inventory items.
+
+The override survives reconnects until you close the game. Enter it again after
+restarting. `!autoequip` reports its state; `!autoequip seed` restores the seed's
+setting. Skipped equipment must be equipped manually; existing spell backfill can
+fill empty memory slots after restoring SEED. No new YAML or seed is needed.
+
+The updated client also spaces queued equipment changes by at least 500 ms,
+independently of item-grant pacing. This prevents a ready queue from changing
+several armour pieces in one frame. The spacing is a conservative mitigation;
+Fossils's reported crash still needs an in-game reproduction to confirm resolution.
+Moving to Roundtable Hold or restoring a save does not remove the server's backlog.
+
+If `!help` does not list `!autoequip`, your client predates the recovery command.
+
+## Hint a locked ability
+
+In the connected client's console/chat, use the exact ability item name:
+
+```text
+!hint Unlock: R1
+!hint Unlock: Roll
+```
+
+These request normal Archipelago hints for light attack and roll respectively.
+
+## Escape anywhere
+
+Type:
+
+```text
+!warp 11102950
+```
+
+That warps to the Table of Lost Grace in Roundtable Hold. It is the first recovery step when you
+are out of bounds, trapped in unloaded geometry, or cannot use the map.
+
+## Find and warp to a grace
+
+Search the grace entries carried by the seed. For a region bundle, use part of the region name:
+
+```text
+!grace liurnia
+!grace leyndell
+```
+
+Each match shows its unlock flag and a complete warp command, for example:
+
+```text
+Leyndell Lock bundle: flag 71102 = false; !warp 11001952
+```
+
+Copy the `!warp ...` part back into the console. The number after `flag` is a different ID; do not
+pass that number to `!warp`.
+
+If the line says `warp unavailable`, the game had not made `BonfireWarpParam` readable yet or no
+row matched. Load a character fully and retry. The flag-only fallback below still works.
+
+## Restore a missing grace
+
+When the destination is safe but its grace never lit, set that grace's unlock flag:
+
+```text
+!setflag <grace flag> 1
+```
+
+The number comes from `!grace`, not from guesswork. Confirm it before writing with:
+
+```text
+!flag <grace flag>
+```
+
+Capital flags that have been needed in real support cases are:
+
+| Grace | Unlock flag | Command |
+|---|---:|---|
+| Elden Throne | 71100 | `!setflag 71100 1` |
+| East Capital Rampart | 71102 | `!setflag 71102 1` |
+| West Capital Rampart | 71105 | `!setflag 71105 1` |
+| Queen's Bedchamber | 71107 | `!setflag 71107 1` |
+
+These IDs come from the shipped `grace_flags.tsv`. Do not substitute a nearby-looking number.
+After the write, open the map and fast-travel normally, or use the pasteable command from
+`!grace` if map travel is the thing that is broken.
+
+## Grant a specific Great Rune
+
+Use the exact full item ID when rescuing a missing Great Rune. A name-only grant can match more
+than one record and repeatedly retry the wrong one; these commands are unambiguous:
+
+| Great Rune | Command |
+|---|---|
+| Godrick's Great Rune | `!give 0x40001fd4` |
+| Radahn's Great Rune | `!give 0x40001fd5` |
+| Morgott's Great Rune | `!give 0x40001fd6` |
+| Rykard's Great Rune | `!give 0x40001fd7` |
+| Mohg's Great Rune | `!give 0x40001fd8` |
+| Malenia's Great Rune | `!give 0x40001fd9` |
+| Great Rune of the Unborn | `!give 0x40002760` |
+
+For any other item, [ITEM-IDS.md](ITEM-IDS.md) is the generated `!give` reference: every vanilla
+item name in the world's own catalog, with its hex and decimal full ID.
+
+These commands grant inventory items only. The Leyndell entrance reads event flags rather than
+the inventory, so granting two or more Great Runes does not repair a sealed capital gate. Use the
+next section for that symptom.
+
+Before rescuing, read the log. A rune that "vanished" after a bell-bearing or prayerbook hand-in
+and now prints `[reconcile] INERT: goods 0x40001fd4..d9` after every load may still be
+in the inventory: the old client scan could miss occupied key-item slots. Client #638
+fixes that scan in the v0.6.0.1 client update. Open the Key Items tab first; if the rune is listed, do not `!give` it -- the game
+refuses the duplicate and the command changes nothing. On an updated client, diagnostics show where an item was observed, including
+slots beyond the live-entry count. The `egd_result` field is diagnostic and may be
+marked `UNVERIFIED-FIELD`; do not treat it alone as proof that a grant succeeded.
+
+These IDs are the boss-drop rows. They cannot be equipped at a grace (the menu wants rows
+191-196, the Divine Tower's award), and the restore flag the client sets means the tower will not
+offer to convert them. That is client #316, not a rescue.
+
+## A Whetblade is blocking received items
+
+Do **not** try to repair this with `!give`. Current clients already use the exact IDs below, and
+Elden Ring 1.17 can accept the grant without putting the Whetblade in inventory. Repeating the same
+grant cannot advance the receive cursor and may produce three refusal popups after each reload.
+
+The IDs are useful for identifying the failure in the log, not as rescue commands. The affinity
+flags are the functional unlock and are safe to set manually on an affected build:
+
+| Whetblade | Full item ID | Affinity rescue |
+|---|---|---|
+| Iron Whetblade | `0x4000230a` | `!setflag 65610 1`; `!setflag 65620 1`; `!setflag 65630 1` |
+| Red-Hot Whetblade | `0x4000230b` | `!setflag 65640 1`; `!setflag 65650 1` |
+| Sanctified Whetblade | `0x4000230c` | `!setflag 65660 1`; `!setflag 65670 1` |
+| Glintstone Whetblade | `0x4000230d` | `!setflag 65680 1`; `!setflag 65690 1` |
+| Black Whetblade | `0x4000230e` | `!setflag 65720 1`; `!setflag 65700 1`; `!setflag 65710 1` |
+
+If the log says one of these goods was `accepted 3 grant(s) and was never observable`, the receive
+cursor may still be caught up: `stream=235 cursor=235`, for example, means all 235 items were
+processed. Use the affinity commands above if those choices are absent at a grace, keep the log,
+and update to a client containing the flag-delivery fix. The physical Whetblade may remain absent
+from inventory on the affected build even though its affinities work. Follow
+[client issue #482](https://github.com/4laric/from-software-archipelago-clients/issues/482) for the
+fix and affected-build details.
+
+## The Leyndell capital gate will not open
+
+The Seal of the Royal Capital reads two flags: the two-great-rune gate (`182`) and its paired
+capital condition (`105`). When a seed's rune supply has left the capital sealed and you cannot get
+in, set both, then confirm:
+
+```text
+!setflag 182 1
+!setflag 105 1
+!flag 182
+```
+
+`182` is the game's "at least two great runes possessed" result, so setting it opens the fogwall
+directly; `105` is the paired condition the seal also checks. This is the standard fix for being
+routinely unable to enter Leyndell.
+
+## The Radagon or Elden Beast arena has no floor
+
+If entering the final arena drops the character into a void, the game's burnt-world state was not
+applied. Confirm flag `300`, set it when absent, then leave and reload the arena:
+
+```text
+!flag 300
+!setflag 300 1
+```
+
+Flag `300` is the world-state flag that makes the game place the arena. It is not a boss-defeat
+flag and does not complete Radagon or the Elden Beast. Capture the current log before changing it;
+on a current client, a missing flag here is a bug worth reporting.
+
+## A check never registered
+
+Enemy, boss, and NPC drops can occasionally fail to set their check flag. This happens most often
+with enemy randomization, when the enemy responsible for the flag never spawns. If a pickup did not
+register, use `!check` to find its acquisition flag by name:
+
+```
+!check larval tear
+```
+
+The console prints each matching check, whether its flag is set, and a ready `!setflag`:
+
+```
+Ainsel River :: Larval Tear - around Dragonkin Soldier of Nokstella (1): flag 12017965 = false; !setflag 12017965 1
+```
+
+Copy the `!setflag ...` line to send the check on the next poll. `!check` only lists checks with a
+settable flag: enemy, boss, and NPC drops, plus offline pickups. Normal world pickups fire on their
+own and do not appear.
+
+Setting a check's flag also drops its vanilla item locally, so use this for a check that never fired,
+not to double up a pickup you can still reach.
+
+For a boss whose swept checks never released, set its **defeat flag** from the table at the
+end of this guide instead.
+
+## The goal did not fire
+
+Pick up any item. Some older goal paths defer their final send until the next pickup. If that does
+not finish the slot, capture the log from the current session before restarting and report it.
+
+## Find the client log
+
+**Easiest (v0.6.5.5 client and later):** click **Export client log** in the overlay's menu bar, or
+type `!exportlog`. The client saves `export-<date>-<time>.log` beside its log, puts the full path
+in the overlay and on your clipboard, and opens Explorer with the file selected. That file holds
+your current session and the one before it (so a crash you just relaunched from is included), plus
+a recent `crash-<pid>.txt` if there is one, and stays small enough to upload to Discord. Attach it
+as-is. The rest of this section is for finding the raw log by hand.
+
+Logs are named `archipelago-YYYY-MM-DD.log` and append several launches from the same day. Search
+from the last `=== SESSION START` line when reporting the current run.
+
+- **The shipped me3 profile:** `%LocalAppData%\Programs\garyttierney\me3\log`
+- **thefifthmatt's randomizer, ModEngine2, or another non-me3 loader:** open the folder that
+  contains the loaded `eldenring_archipelago.dll`; its log is in the `log` folder beside that DLL.
+  With matt's **Add DLL mod** layout this is normally the randomizer output's DLL folder, not the
+  me3 AppData folder.
+- `Elden Ring\Game\log\`
+
+Attach the whole log, your YAML, what you typed, and what happened. The session-start line records
+the client build and the log's early provenance lines name which loader and nearby mods were seen.
+
+## Appendix: boss defeat flags
+
+If a boss's checks never released, its sweep may not have fired. Enemy randomisation can also
+replace the boss before the vanilla kill flag is set. In either case, set the defeat flag and the
+swept checks will report on the next poll:
+
+```text
+!setflag <defeat flag> 1
+```
+
+Set a defeat flag only when the fight is genuinely done and its checks are stuck. The flag marks the
+boss dead. Some names appear more than once because separate arenas or phases use separate flags;
+choose the row for the fight you completed.
+
+| Boss | Defeat flag |
+|---|---:|
+| Godrick the Grafted | 10000800 |
+| Margit, the Fell Omen | 10000850 |
+| Grafted Scion | 10010800 |
+| Morgott, the Omen King | 11000800 |
+| Godfrey, First Elden Lord | 11000850 |
+| Godfrey, First Elden Lord | 11050800 |
+| Sir Gideon Ofnir, the All-Knowing | 11050850 |
+| Dragonkin Soldier of Nokstella | 12010800 |
+| Dragonkin Soldier | 12010850 |
+| Valiant Gargoyle | 12020800 |
+| Valiant Gargoyle (Twinblade) | 12020801 |
+| Dragonkin Soldier | 12020830 |
+| Mimic Tear | 12020850 |
+| Crucible Knight Siluria | 12030390 |
+| Fia's Champion | 12030800 |
+| Sorcerer Rogier | 12030810 |
+| Lionel the Lionhearted | 12030811 |
+| Fia's Champion | 12030812 |
+| Fia's Champion | 12030813 |
+| Lichdragon Fortissax | 12030850 |
+| Astel, Naturalborn of the Void | 12040800 |
+| Mohg, Lord of Blood | 12050800 |
+| Ancestor Spirit | 12080800 |
+| Regal Ancestor Spirit | 12090800 |
+| Maliketh, the Black Blade | 13000800 |
+| Beast Clergyman | 13000801 |
+| Dragonlord Placidusax | 13000830 |
+| Godskin Duo | 13000850 |
+| Rennala, Queen of the Full Moon | 14000800 |
+| Rennala, Queen of the Full Moon | 14000801 |
+| Red Wolf of Radagon | 14000850 |
+| Malenia, Blade of Miquella | 15000800 |
+| Loretta, Knight of the Haligtree | 15000850 |
+| Rykard, Lord of Blasphemy | 16000800 |
+| God-Devouring Serpent | 16000801 |
+| Godskin Noble | 16000850 |
+| Abductor Virgin (Swinging Sickle) | 16000860 |
+| Abductor Virgin (Wheel) | 16000861 |
+| Ulcerated Tree Spirit | 18000800 |
+| Soldier of Godrick | 18000850 |
+| Elden Beast | 19000800 |
+| Radagon of the Golden Order | 19000810 |
+| Divine Beast Dancing Lion | 20000800 |
+| Radahn, Consort of Miquella | 20010800 |
+| Promised Consort Radahn | 20010801 |
+| Needle Knight Leda | 20010850 |
+| Dryleaf Dane | 20010851 |
+| Redmane Freyja | 20010852 |
+| Golden Hippopotamus | 21000850 |
+| Base Serpent Messmer | 21010800 |
+| Messmer the Impaler | 21010801 |
+| Putrescent Knight | 22000800 |
+| Metyr, Mother of Fingers | 25000800 |
+| Midra, Lord of Frenzied Flame | 28000800 |
+| Cemetery Shade | 30000800 |
+| Erdtree Burial Watchdog | 30010800 |
+| Erdtree Burial Watchdog | 30020800 |
+| Spiritcaller Snail | 30030800 |
+| Grave Warden Duelist | 30040800 |
+| Cemetery Shade | 30050800 |
+| Black Knife Assassin | 30050850 |
+| Erdtree Burial Watchdog | 30060800 |
+| Erdtree Burial Watchdog | 30070800 |
+| Ancient Hero of Zamor | 30080800 |
+| Red Wolf of the Champion | 30090800 |
+| Crucible Knight Ordovis | 30100800 |
+| Crucible Knight | 30100801 |
+| Black Knife Assassin | 30110800 |
+| Misbegotten Warrior | 30120800 |
+| Perfumer Tricia | 30120801 |
+| Grave Warden Duelist | 30130800 |
+| Erdtree Burial Watchdog (Sword) | 30140800 |
+| Erdtree Burial Watchdog (Scepter) | 30140801 |
+| Cemetery Shade | 30150800 |
+| Putrid Tree Spirit | 30160800 |
+| Ancient Hero of Zamor | 30170800 |
+| Ulcerated Tree Spirit | 30180800 |
+| Putrid Grave Warden Duelist | 30190800 |
+| Stray Mimic Tear | 30200800 |
+| Patches | 31000800 |
+| Patches | 31000850 |
+| Runebear | 31010800 |
+| Miranda Blossom | 31020800 |
+| Beastman of Farum Azula | 31030800 |
+| Cleanrot Knight | 31040800 |
+| Bloodhound Knight | 31050800 |
+| Crystalian (Staff) | 31060800 |
+| Crystalian (Spear) | 31060801 |
+| Kindred of Rot | 31070800 |
+| Kindred of Rot | 31070801 |
+| Demi-Human Queen Margot | 31090800 |
+| Beastman of Farum Azula (Cleaver) | 31100800 |
+| Beastman of Farum Azula (Throwing Knife) | 31100801 |
+| Putrid Crystalian (Spear) | 31110800 |
+| Putrid Crystalian (Ringblade) | 31110801 |
+| Putrid Crystalian (Staff) | 31110802 |
+| Misbegotten Crusader | 31120800 |
+| Demi-Human Chief | 31150800 |
+| Demi-Human Chief | 31150801 |
+| Guardian Golem | 31170800 |
+| Miranda the Blighted Bloom | 31180800 |
+| Omenkiller | 31180801 |
+| Black Knife Assassin | 31190800 |
+| Necromancer Garris | 31190850 |
+| Cleanrot Knight (Spear) | 31200800 |
+| Cleanrot Knight (Sickle) | 31200801 |
+| Frenzied Duelist | 31210800 |
+| Spiritcaller Snail | 31220800 |
+| Godskin Apostle | 31220801 |
+| Godskin Noble | 31220802 |
+| Scaly Misbegotten | 32000800 |
+| Stonedigger Troll | 32010800 |
+| Crystalian | 32020800 |
+| Stonedigger Troll | 32040800 |
+| Crystalian (Ringblade) | 32050800 |
+| Crystalian (Spear) | 32050801 |
+| Magma Wyrm | 32070800 |
+| Fallingstar Beast | 32080800 |
+| Astel, Stars of Darkness | 32110800 |
+| Onyx Lord | 34120800 |
+| Godskin Apostle | 34130800 |
+| Fell Twin | 34140850 |
+| Fell Twin | 34140851 |
+| Mohg, the Omen | 35000800 |
+| Esgar, Priest of Blood | 35000850 |
+| Magma Wyrm Makar | 39200800 |
+| Death Knight | 40000800 |
+| Death Knight | 40010800 |
+| Demi-Human Swordmaster Onze | 41000800 |
+| Curseblade Labirith | 41010800 |
+| Lamenter | 41020800 |
+| Chief Bloodfiend | 43000800 |
+| Ancient Dragon-Man | 43010800 |
+| Alecto, Black Knife Ringleader | 1033420800 |
+| Erdtree Avatar | 1033430800 |
+| Bols, Carian Knight | 1033450800 |
+| Glintstone Dragon Adula | 1034420800 |
+| Glintstone Dragon Smarag | 1034450800 |
+| Royal Revenant | 1034480800 |
+| Glintstone Dragon Adula | 1034500800 |
+| Omenkiller | 1035420800 |
+| Royal Knight Loretta | 1035500800 |
+| Magma Wyrm | 1035530800 |
+| Death Rite Bird | 1036450800 |
+| Night's Cavalry | 1036480800 |
+| Onyx Lord | 1036500800 |
+| Full-Grown Fallingstar Beast | 1036540800 |
+| Deathbird | 1037420800 |
+| Bell Bearing Hunter | 1037460800 |
+| Ancient Dragon Lansseax | 1037510800 |
+| Demi-Human Queen Maggie | 1037530800 |
+| Ulcerated Tree Spirit | 1037540810 |
+| Adan, Thief of Fire | 1038410800 |
+| Erdtree Avatar | 1038480800 |
+| Demi-Human Queen Gilika | 1038510800 |
+| Tibia Mariner | 1038520800 |
+| Fallingstar Beast | 1038540800 |
+| Night's Cavalry | 1039430800 |
+| Tibia Mariner | 1039440800 |
+| Godefroy the Grafted | 1039500800 |
+| Night's Cavalry | 1039510800 |
+| Elemer of the Briar | 1039540800 |
+| Black Knife Assassin | 1040520800 |
+| Sanguine Noble | 1040530800 |
+| Fallingstar Beast | 1041500800 |
+| Tree Sentinel | 1041510800 |
+| Wormface | 1041530800 |
+| Ancient Hero of Zamor | 1042330800 |
+| Tree Sentinel | 1042360800 |
+| Crucible Knight | 1042370800 |
+| Deathbird | 1042380800 |
+| Bell Bearing Hunter | 1042380850 |
+| Godskin Apostle | 1042550800 |
+| Leonine Misbegotten | 1043300800 |
+| Erdtree Avatar | 1043330800 |
+| Flying Dragon Agheel | 1043360800 |
+| Night's Cavalry | 1043370800 |
+| Bell Bearing Hunter | 1043530800 |
+| Deathbird | 1044320800 |
+| Night's Cavalry | 1044320850 |
+| Bloodhound Knight Darriwil | 1044350800 |
+| Mad Pumpkin Head | 1044360800 |
+| Deathbird | 1044530800 |
+| Tibia Mariner | 1045390800 |
+| Draconic Tree Sentinel | 1045520800 |
+| Putrid Avatar | 1047400800 |
+| Decaying Ekzykes | 1048370800 |
+| Mad Pumpkin Head (Hammer) | 1048400800 |
+| Bell Bearing Hunter | 1048410800 |
+| Night's Cavalry | 1048510800 |
+| Death Rite Bird | 1048570800 |
+| Night's Cavalry | 1049370800 |
+| Death Rite Bird | 1049370850 |
+| Commander O'Neil | 1049380800 |
+| Nox Monk | 1049390800 |
+| Battlemage Hugues | 1049390850 |
+| Black Blade Kindred | 1049520800 |
+| Great Wyrm Theodorix | 1050560800 |
+| Death Rite Bird | 1050570800 |
+| Putrid Avatar | 1050570850 |
+| Crucible Knight | 1051360800 |
+| Putrid Avatar | 1051400800 |
+| Black Blade Kindred | 1051430800 |
+| Commander Niall | 1051570800 |
+| Flying Dragon Greyll | 1052410800 |
+| Night's Cavalry | 1052410850 |
+| Roundtable Knight Vyke | 1053560800 |
+| Night's Cavalry (Glaive) | 1248550800 |
+| Starscourge Radahn | 1252380800 |
+| Fire Giant | 1252520800 |
+| Borealis the Freezing Fog | 1254560800 |
+| Romina, Saint of the Bud | 2044450800 |
+| Rugalea the Great Red Bear | 2044470800 |
+| Ghostflame Dragon | 2045440800 |
+| Dancer of Ranah | 2046380800 |
+| Demi-Human Queen Marigga | 2046400800 |
+| Knight of the Solitary Gaol | 2046410800 |
+| Red Bear | 2046450800 |
+| Divine Beast Dancing Lion | 2046460800 |
+| Death Rite Bird | 2047390800 |
+| Black Knight Garrew | 2047450800 |
+| Ghostflame Dragon | 2048380850 |
+| Rellana, Twin Moon Knight | 2048440800 |
+| Jagged Peak Drake | 2049410800 |
+| Black Knight Edredd | 2049430850 |
+| Dryleaf Dane | 2049440800 |
+| Ralva the Great Red Bear | 2049450800 |
+| Commander Gaius | 2049480800 |
+| Dryleaf Dane | 2050430800 |
+| Tree Sentinel | 2050470800 |
+| Scadutree Avatar | 2050480810 |
+| Scadutree Avatar | 2050480811 |
+| Scadutree Avatar | 2050480812 |
+| Tree Sentinel | 2050480860 |
+| Rakshasa | 2051440800 |
+| Jori, Elder Inquisitor | 2052430800 |
+| Fallingstar Beast | 2052480800 |
+| Bayle the Dread | 2054390800 |
+| Ancient Dragon Senessax | 2054390850 |

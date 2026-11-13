@@ -1,0 +1,23 @@
+2026-11-12 21:38:30 === NATIVE CRASH [first-chance — a handler may still absorb it] ===
+exception 0xc0000005 ACCESS_VIOLATION (execute at 0x0)
+at  0x0 (no module)
+rsp 0xae7a4ff3e8
+registers at fault (current frame):
+  rax 0x00007ff2b5450150  rbx 0x00007ff2ab47b0f0  rcx 0x00007ff2b5450020  rdx 0x00007ff2ab47f140
+  rsi 0x00007ff2ab47f110  rdi 0x00007ff2ab684460  rbp 0x0000000000000000
+  r8 0x000000ae7a4ff388   r9 0x0000000000000000  r10 0x0000000000000000  r11 0x0000000000000246
+  r12 0x0000000000000000  r13 0x00007ff2b546c000  r14 0x00007ff3bae3c9a0  r15 0x000000ae7a4ff658
+session: enemy-scaling wrote 946 rung(s) this session (827 to UNLOADED chrs, 0 recompute-failed-loaded) [client#301 correlation]
+quiescence: world edge left 2004ms ago; scaling sweep 2196ms ago; reconcile apply 43295ms ago; AddItem entry never; AddItem exit never [client#463]
+thread ThreadId(7)
+backtrace (module+offset, HANDLER stack — fault context unusable):
+   0: eldenring_archipelago.dll+0x25e236 (0x7ff8d805e236)
+   1: eldenring_archipelago.dll+0x27bfbd (0x7ff8d807bfbd)
+   2: eldenring_archipelago.dll+0x27a7e6 (0x7ff8d807a7e6)
+   3: ntdll.dll+0xc44d6 (0x7ff9f63044d6)
+   4: ntdll.dll+0xc3c75 (0x7ff9f6303c75)
+   5: ntdll.dll+0x165dee (0x7ff9f63a5dee)
+modules:
+  eldenring_archipelago.dll @ 0x7ff8d7e00000
+  ntdll.dll @ 0x7ff9f6240000
+

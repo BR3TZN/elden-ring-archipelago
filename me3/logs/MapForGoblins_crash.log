@@ -1,0 +1,224 @@
+
+[2026-11-12 19:52:59] [SESSION] vanilla v2.1.5 git=d12dfb4c base=0x7FF8D6ED0000 size=0x40B000 stamp=0x5811B608
+  [env] mfg=2.1.5 vanilla d12dfb4c game=2.7.2.0 gimg=0x5DFD600 gts=0x6AABF7E7
+
+  [modules] init: 14 non-system
+  eldenring.exe                    v2.7.2.0 base=0x7FF64D4F0000 size=0x5DFD600
+  steam_api64.dll                  v6.28.18.86 base=0x7FF903420000 size=0x44000
+  amd_ags_x64.dll                  v5.0.5.0 base=0x7FF958470000 size=0x20000
+  bink2w64.dll                     v2021.5.1.0 base=0x7FF8E5320000 size=0x69000
+  oo2core_6_win64.dll              v0.0.0.0 base=0x7FF8E1340000 size=0x10E000
+  me3_mod_host.dll                 v0.13.0.0 base=0x7FF8D97C0000 size=0x651000
+  gameoverlayrenderer64.dll        v11.22.14.96 base=0x7FF8D9E20000 size=0x1D3000
+  steamclient64.dll                v11.22.14.96 base=0x7FF943880000 size=0x19EC000
+  vstdlib_s64.dll                  v11.22.14.96 base=0x7FF9B3F30000 size=0x83000
+  tier0_s64.dll                    v11.22.14.96 base=0x7FF94CFE0000 size=0x30C000
+  eldenring_archipelago.dll        v0.0.0.0 base=0x7FF8D8830000 size=0xF8C000
+  MapForGoblins.dll                v0.0.0.0 base=0x7FF8DDB50000 size=0x42000
+  EOSSDK-Win64-Shipping.dll        v1.19.0.7 base=0x7FF8D72E0000 size=0x134E000
+  MapForGoblins.upstream.dll       v2.1.5.0 base=0x7FF8D6ED0000 size=0x40B000
+
+[2026-11-12 19:53:10] [EXCEPTION] code=0xC0000005 fault=eldenring.exe+0x265D68C read 0xFFFFFFFFFFFFFFFF
+  [env] mfg=2.1.5 vanilla d12dfb4c game=2.7.2.0 gimg=0x5DFD600 gts=0x6AABF7E7
+  [state] opens=0 closes=0 gen=0 tracked=0 created=0 failed=0 layer=-1 mapOpen=0 parent=0x0 wt=0x0 up=11s tOpen=-1s tClose=-1s t=32812 own=0
+  [mem] st=NONE
+  [regs] rax=0x7FF419A40E78 rcx=0xBFF0A3D7C2AE4CCD rdx=0xC04F5C29C26FCCCD rbx=0x7FF651037628 rsi=0x0 rdi=0x7FF41AE032A0 r8=0x436D91EC410B0A3D r9=0x7FF41AA40000
+  [regs2] rsp=0xFFD86FF5E0 rbp=0x0 r10=0x7FF41AA7B4F0 r11=0x7FF651037638 r12=0x7FF41896C538 r13=0x7FF41896C588 r14=0x0 r15=0xC
+  #00 eldenring.exe+0x265D68C
+  #01 eldenring.exe+0x26560DC
+  #02 eldenring.exe+0x26565DE
+  #03 eldenring.exe+0x1F807F
+  #04 eldenring.exe+0x1F8E98
+  #05 eldenring.exe+0x1F7BB7
+  #06 eldenring.exe+0x26D9515
+  #07 eldenring.exe+0x26D9810
+  #08 eldenring.exe+0x26908B2
+  #09 eldenring.exe+0x265936E
+  #10 eldenring.exe+0xEB5734
+  #11 eldenring.exe+0xDED659
+  #12 eldenring.exe+0xC91B80
+  #13 eldenring.exe+0xC91E2E
+  #14 eldenring.exe+0x24FF83B
+  #15 KERNEL32.DLL+0x2DDA7
+  #16 ntdll.dll+0x7EE4C
+
+[2026-11-12 19:53:10] [CRASH] code=0xC0000005 fault=eldenring.exe+0x265D68C read 0xFFFFFFFFFFFFFFFF
+  [env] mfg=2.1.5 vanilla d12dfb4c game=2.7.2.0 gimg=0x5DFD600 gts=0x6AABF7E7
+  [state] opens=0 closes=0 gen=0 tracked=0 created=0 failed=0 layer=-1 mapOpen=0 parent=0x0 wt=0x0 up=11s tOpen=-1s tClose=-1s t=32812 own=0
+  [mem] st=NONE
+  [regs] rax=0x7FF419A40E78 rcx=0xBFF0A3D7C2AE4CCD rdx=0xC04F5C29C26FCCCD rbx=0x7FF651037628 rsi=0x0 rdi=0x7FF41AE032A0 r8=0x436D91EC410B0A3D r9=0x7FF41AA40000
+  [regs2] rsp=0xFFD86FF5E0 rbp=0x0 r10=0x7FF41AA7B4F0 r11=0x7FF651037638 r12=0x7FF41896C538 r13=0x7FF41896C588 r14=0x0 r15=0xC
+  #00 eldenring.exe+0x265D68C
+  #01 eldenring.exe+0x26560DC
+  #02 eldenring.exe+0x26565DE
+  #03 eldenring.exe+0x1F807F
+  #04 eldenring.exe+0x1F8E98
+  #05 eldenring.exe+0x1F7BB7
+  #06 eldenring.exe+0x26D9515
+  #07 eldenring.exe+0x26D9810
+  #08 eldenring.exe+0x26908B2
+  #09 eldenring.exe+0x265936E
+  #10 eldenring.exe+0xEB5734
+  #11 eldenring.exe+0xDED659
+  #12 eldenring.exe+0xC91B80
+  #13 eldenring.exe+0xC91E2E
+  #14 eldenring.exe+0x24FF83B
+  #15 KERNEL32.DLL+0x2DDA7
+  #16 ntdll.dll+0x7EE4C
+  [dump] rc=6 gle=2147943398
+
+[2026-11-12 19:58:30] [SESSION] vanilla v2.1.5 git=d12dfb4c base=0x7FF8D8E60000 size=0x40B000 stamp=0x5811B608
+  [env] mfg=2.1.5 vanilla d12dfb4c game=2.7.2.0 gimg=0x5DFD600 gts=0x6AABF7E7
+
+  [modules] init: 14 non-system
+  eldenring.exe                    v2.7.2.0 base=0x7FF64D4F0000 size=0x5DFD600
+  oo2core_6_win64.dll              v0.0.0.0 base=0x7FF8E1340000 size=0x10E000
+  amd_ags_x64.dll                  v5.0.5.0 base=0x7FF958470000 size=0x20000
+  bink2w64.dll                     v2021.5.1.0 base=0x7FF8E3240000 size=0x69000
+  steam_api64.dll                  v6.28.18.86 base=0x7FF903420000 size=0x44000
+  me3_mod_host.dll                 v0.13.0.0 base=0x7FF8D9270000 size=0x651000
+  gameoverlayrenderer64.dll        v11.22.14.96 base=0x7FF8D98D0000 size=0x1D3000
+  steamclient64.dll                v11.22.14.96 base=0x7FF943880000 size=0x19EC000
+  tier0_s64.dll                    v11.22.14.96 base=0x7FF94CFE0000 size=0x30C000
+  vstdlib_s64.dll                  v11.22.14.96 base=0x7FF9B3F30000 size=0x83000
+  eldenring_archipelago.dll        v0.0.0.0 base=0x7FF8D76A0000 size=0xF8C000
+  DiscordHook64.dll                v0.0.0.0 base=0x7FF8D9C20000 size=0x3D9000
+  MapForGoblins.dll                v0.0.0.0 base=0x7FF954200000 size=0x42000
+  MapForGoblins.upstream.dll       v2.1.5.0 base=0x7FF8D8E60000 size=0x40B000
+
+  [modules] t+30s: 16 non-system
+  eldenring.exe                    v2.7.2.0 base=0x7FF64D4F0000 size=0x5DFD600
+  oo2core_6_win64.dll              v0.0.0.0 base=0x7FF8E1340000 size=0x10E000
+  amd_ags_x64.dll                  v5.0.5.0 base=0x7FF958470000 size=0x20000
+  bink2w64.dll                     v2021.5.1.0 base=0x7FF8E3240000 size=0x69000
+  steam_api64.dll                  v6.28.18.86 base=0x7FF903420000 size=0x44000
+  me3_mod_host.dll                 v0.13.0.0 base=0x7FF8D9270000 size=0x651000
+  gameoverlayrenderer64.dll        v11.22.14.96 base=0x7FF8D98D0000 size=0x1D3000
+  steamclient64.dll                v11.22.14.96 base=0x7FF943880000 size=0x19EC000
+  tier0_s64.dll                    v11.22.14.96 base=0x7FF94CFE0000 size=0x30C000
+  vstdlib_s64.dll                  v11.22.14.96 base=0x7FF9B3F30000 size=0x83000
+  eldenring_archipelago.dll        v0.0.0.0 base=0x7FF8D76A0000 size=0xF8C000
+  DiscordHook64.dll                v0.0.0.0 base=0x7FF8D9C20000 size=0x3D9000
+  MapForGoblins.dll                v0.0.0.0 base=0x7FF954200000 size=0x42000
+  MapForGoblins.upstream.dll       v2.1.5.0 base=0x7FF8D8E60000 size=0x40B000
+  EOSSDK-Win64-Shipping.dll        v1.19.0.7 base=0x7FF8D51D0000 size=0x134E000
+  MpOav.dll                        v4.18.26100.4 base=0x7FF9CA720000 size=0xA5000
+
+[2026-11-12 20:00:56] [SESSION] vanilla v2.1.5 git=d12dfb4c base=0x7FF8D6110000 size=0x40B000 stamp=0x5811B608
+  [env] mfg=2.1.5 vanilla d12dfb4c game=2.7.2.0 gimg=0x5DFD600 gts=0x6AABF7E7
+
+  [modules] init: 13 non-system
+  eldenring.exe                    v2.7.2.0 base=0x7FF64D4F0000 size=0x5DFD600
+  bink2w64.dll                     v2021.5.1.0 base=0x7FF9095C0000 size=0x69000
+  oo2core_6_win64.dll              v0.0.0.0 base=0x7FF8E31A0000 size=0x10E000
+  steam_api64.dll                  v6.28.18.86 base=0x7FF90EB10000 size=0x44000
+  amd_ags_x64.dll                  v5.0.5.0 base=0x7FF9874B0000 size=0x20000
+  me3_mod_host.dll                 v0.13.0.0 base=0x7FF8D97C0000 size=0x651000
+  gameoverlayrenderer64.dll        v11.22.14.96 base=0x7FF8D9E20000 size=0x1D3000
+  steamclient64.dll                v11.22.14.96 base=0x7FF943880000 size=0x19EC000
+  tier0_s64.dll                    v11.22.14.96 base=0x7FF94CFE0000 size=0x30C000
+  vstdlib_s64.dll                  v11.22.14.96 base=0x7FF9B3F30000 size=0x83000
+  eldenring_archipelago.dll        v0.0.0.0 base=0x7FF8D8830000 size=0xF88000
+  MapForGoblins.dll                v0.0.0.0 base=0x7FF909570000 size=0x42000
+  MapForGoblins.upstream.dll       v2.1.5.0 base=0x7FF8D6110000 size=0x40B000
+
+  [modules] t+30s: 16 non-system
+  eldenring.exe                    v2.7.2.0 base=0x7FF64D4F0000 size=0x5DFD600
+  bink2w64.dll                     v2021.5.1.0 base=0x7FF9095C0000 size=0x69000
+  oo2core_6_win64.dll              v0.0.0.0 base=0x7FF8E31A0000 size=0x10E000
+  steam_api64.dll                  v6.28.18.86 base=0x7FF90EB10000 size=0x44000
+  amd_ags_x64.dll                  v5.0.5.0 base=0x7FF9874B0000 size=0x20000
+  me3_mod_host.dll                 v0.13.0.0 base=0x7FF8D97C0000 size=0x651000
+  gameoverlayrenderer64.dll        v11.22.14.96 base=0x7FF8D9E20000 size=0x1D3000
+  steamclient64.dll                v11.22.14.96 base=0x7FF943880000 size=0x19EC000
+  tier0_s64.dll                    v11.22.14.96 base=0x7FF94CFE0000 size=0x30C000
+  vstdlib_s64.dll                  v11.22.14.96 base=0x7FF9B3F30000 size=0x83000
+  eldenring_archipelago.dll        v0.0.0.0 base=0x7FF8D8830000 size=0xF88000
+  MapForGoblins.dll                v0.0.0.0 base=0x7FF909570000 size=0x42000
+  MapForGoblins.upstream.dll       v2.1.5.0 base=0x7FF8D6110000 size=0x40B000
+  EOSSDK-Win64-Shipping.dll        v1.19.0.7 base=0x7FF8D72E0000 size=0x134E000
+  MpOav.dll                        v4.18.26100.4 base=0x7FF9CA720000 size=0xA5000
+  DiscordHook64.dll                v0.0.0.0 base=0x7FF8D42C0000 size=0x3D9000
+
+[2026-11-12 21:37:09] [SESSION] vanilla v2.1.5 git=d12dfb4c base=0x7FF90A7B0000 size=0x40B000 stamp=0x5811B608
+  [env] mfg=2.1.5 vanilla d12dfb4c game=2.7.2.0 gimg=0x5DFD600 gts=0x6AABF7E7
+
+  [modules] init: 13 non-system
+  eldenring.exe                    v2.7.2.0 base=0x7FF64D4F0000 size=0x5DFD600
+  bink2w64.dll                     v2021.5.1.0 base=0x7FF9DA8F0000 size=0x69000
+  amd_ags_x64.dll                  v5.0.5.0 base=0x7FF9DA8D0000 size=0x20000
+  oo2core_6_win64.dll              v0.0.0.0 base=0x7FF96B4D0000 size=0x10E000
+  steam_api64.dll                  v6.28.18.86 base=0x7FF9BA500000 size=0x44000
+  me3_mod_host.dll                 v0.13.0.0 base=0x7FF90ABC0000 size=0x651000
+  gameoverlayrenderer64.dll        v11.22.14.96 base=0x7FF90C1C0000 size=0x1D3000
+  steamclient64.dll                v11.22.14.96 base=0x7FF943880000 size=0x19EC000
+  tier0_s64.dll                    v11.22.14.96 base=0x7FF94CFE0000 size=0x30C000
+  vstdlib_s64.dll                  v11.22.14.96 base=0x7FF9B3F30000 size=0x83000
+  eldenring_archipelago.dll        v0.0.0.0 base=0x7FF8D7E00000 size=0x19F9000
+  MapForGoblins.dll                v0.0.0.0 base=0x7FF9BA4B0000 size=0x42000
+  MapForGoblins.upstream.dll       v2.1.5.0 base=0x7FF90A7B0000 size=0x40B000
+
+  [modules] t+30s: 16 non-system
+  eldenring.exe                    v2.7.2.0 base=0x7FF64D4F0000 size=0x5DFD600
+  bink2w64.dll                     v2021.5.1.0 base=0x7FF9DA8F0000 size=0x69000
+  amd_ags_x64.dll                  v5.0.5.0 base=0x7FF9DA8D0000 size=0x20000
+  oo2core_6_win64.dll              v0.0.0.0 base=0x7FF96B4D0000 size=0x10E000
+  steam_api64.dll                  v6.28.18.86 base=0x7FF9BA500000 size=0x44000
+  me3_mod_host.dll                 v0.13.0.0 base=0x7FF90ABC0000 size=0x651000
+  gameoverlayrenderer64.dll        v11.22.14.96 base=0x7FF90C1C0000 size=0x1D3000
+  steamclient64.dll                v11.22.14.96 base=0x7FF943880000 size=0x19EC000
+  tier0_s64.dll                    v11.22.14.96 base=0x7FF94CFE0000 size=0x30C000
+  vstdlib_s64.dll                  v11.22.14.96 base=0x7FF9B3F30000 size=0x83000
+  eldenring_archipelago.dll        v0.0.0.0 base=0x7FF8D7E00000 size=0x19F9000
+  MapForGoblins.dll                v0.0.0.0 base=0x7FF9BA4B0000 size=0x42000
+  MapForGoblins.upstream.dll       v2.1.5.0 base=0x7FF90A7B0000 size=0x40B000
+  EOSSDK-Win64-Shipping.dll        v1.19.0.7 base=0x7FF8D6AB0000 size=0x134E000
+  MpOav.dll                        v4.18.26100.4 base=0x7FF9CA720000 size=0xA5000
+  DiscordHook64.dll                v0.0.0.0 base=0x7FF8EDB40000 size=0x3D9000
+
+[2026-11-12 21:38:30] [EXCEPTION] code=0xC0000005 fault=0x0 execute 0x0
+  [env] mfg=2.1.5 vanilla d12dfb4c game=2.7.2.0 gimg=0x5DFD600 gts=0x6AABF7E7
+  [state] opens=0 closes=0 gen=0 tracked=0 created=0 failed=0 layer=-1 mapOpen=0 parent=0x0 wt=0x0 up=81s tOpen=-1s tClose=-1s t=37108 own=0
+  [mem] st=FREE pr=0x1 ty=0x0 base=0x0 size=0x7FFE0000
+  [regs] rax=0x7FF2B5450150 rcx=0x7FF2B5450020 rdx=0x7FF2AB47F140 rbx=0x7FF2AB47B0F0 rsi=0x7FF2AB47F110 rdi=0x7FF2AB684460 r8=0xAE7A4FF388 r9=0x0
+  [regs2] rsp=0xAE7A4FF3E8 rbp=0x0 r10=0x0 r11=0x246 r12=0x0 r13=0x7FF2B546C000 r14=0x7FF3BAE3C9A0 r15=0xAE7A4FF658
+  #00 0x0
+  #01 eldenring.exe+0x114AEB3
+  #02 eldenring.exe+0xED1442
+  #03 eldenring.exe+0xD685D4
+  #04 eldenring.exe+0xD6984B
+  #05 eldenring.exe+0xD6725D
+  #06 eldenring.exe+0xD6CB9A
+  #07 eldenring.exe+0xD7C753
+  #08 eldenring.exe+0xD7B546
+  #09 eldenring.exe+0xE84588
+  #10 eldenring.exe+0xE841BE
+  #11 eldenring.exe+0xE857FF
+  #12 eldenring.exe+0x1F3DCC2
+  #13 eldenring.exe+0x2542BCC
+  #14 KERNEL32.DLL+0x2DDA7
+  #15 ntdll.dll+0x7EE4C
+
+[2026-11-12 21:38:30] [CRASH] code=0xC0000005 fault=0x0 execute 0x0
+  [env] mfg=2.1.5 vanilla d12dfb4c game=2.7.2.0 gimg=0x5DFD600 gts=0x6AABF7E7
+  [state] opens=0 closes=0 gen=0 tracked=0 created=0 failed=0 layer=-1 mapOpen=0 parent=0x0 wt=0x0 up=81s tOpen=-1s tClose=-1s t=37108 own=0
+  [mem] st=FREE pr=0x1 ty=0x0 base=0x0 size=0x7FFE0000
+  [regs] rax=0x7FF2B5450150 rcx=0x7FF2B5450020 rdx=0x7FF2AB47F140 rbx=0x7FF2AB47B0F0 rsi=0x7FF2AB47F110 rdi=0x7FF2AB684460 r8=0xAE7A4FF388 r9=0x0
+  [regs2] rsp=0xAE7A4FF3E8 rbp=0x0 r10=0x0 r11=0x246 r12=0x0 r13=0x7FF2B546C000 r14=0x7FF3BAE3C9A0 r15=0xAE7A4FF658
+  #00 0x0
+  #01 eldenring.exe+0x114AEB3
+  #02 eldenring.exe+0xED1442
+  #03 eldenring.exe+0xD685D4
+  #04 eldenring.exe+0xD6984B
+  #05 eldenring.exe+0xD6725D
+  #06 eldenring.exe+0xD6CB9A
+  #07 eldenring.exe+0xD7C753
+  #08 eldenring.exe+0xD7B546
+  #09 eldenring.exe+0xE84588
+  #10 eldenring.exe+0xE841BE
+  #11 eldenring.exe+0xE857FF
+  #12 eldenring.exe+0x1F3DCC2
+  #13 eldenring.exe+0x2542BCC
+  #14 KERNEL32.DLL+0x2DDA7
+  #15 ntdll.dll+0x7EE4C
+  [dump] rc=6 gle=2147943398

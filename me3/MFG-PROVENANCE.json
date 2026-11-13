@@ -1,0 +1,15 @@
+{
+  "schema_version": 2,
+  "source_repository": "https://github.com/4laric/ERR-MapForGoblins-DLL",
+  "source_commit": "e95a2a0dfec785bab526667449b839f1ef4cb289",
+  "profile": "vanilla",
+  "input_sha256": "cc30e4b9efa0abec13308691cdd3818c43de0343249a9dca68b78a7431c3412a",
+  "upstream_version": "2.1.5",
+  "upstream_sha256": "3dccfb5e4915be0783fd95f3aadd9a4bd7c71a9d043e960542a53bb226459ef6",
+  "dll_sha256": "fd2ae25b0e84471e6706c7aa437b9cc6407546bf20fcb792a91a63d2d314c052",
+  "ini_sha256": "dcd57f2e9badd134d634148fefc42066b116749af3965c9f7d79d5370825bc0f",
+  "license_sha256": "930788e08280183dcda187eeb584c5db0aa3d19b2a160377e8281b52aa26b8bb",
+  "ap_ini_sha256": "257e4f990b76e6cc696d92e2c972db819719062936314677b9bb74c818b16e91",
+  "adapter_license_sha256": "69f2d5a059eea1ae05dbf9f8f3a21ba2e2518654ac0461ba15476cf990f8b1a1",
+  "minhook_license_sha256": "4f21f857550d7be854da6ea5f2da4e6775ca4e3fbb535e4f3d961c47d0bf3335"
+}

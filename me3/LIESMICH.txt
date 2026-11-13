@@ -1,0 +1,38 @@
+Peliarch Elden Ring Archipelago 1.0.2.1 – Spawn-Fix
+Windows x64, inoffizieller Build auf Basis der Peliarch-Quellen für 1.0.2.1
+
+Installation
+
+1. Elden Ring schließen.
+2. Den me3-Ordner öffnen, in dem die tatsächlich gestartete ap.me3 liegt.
+3. Die vorhandene eldenring_archipelago.dll in eldenring_archipelago.dll.bak
+   umbenennen. Die DLL aus diesem Paket direkt neben ap.me3 kopieren.
+4. Den AP-Client wie bisher starten und im Testraum einen neuen Malenia-Trap
+   senden.
+
+Der Spawn-Code verwendet unter Elden Ring 2.7.2.0 das um 16 Bytes verschobene
+Spawner-Feld. Für ältere unterstützte Builds wählt er deren Feld. Ist der
+Spawner gerade nicht verfügbar, bleibt der Trap für einen späteren Tick in
+der Warteschlange. Das Log enthält dann „debug character creator unavailable“.
+
+Der Build verwendet weiterhin den Seed-Vertrag 189fbb37. Er ist für den
+Austausch der Client-DLL in einer vorhandenen 1.0.2.1-Installation gedacht.
+
+Prüfstand
+
+1.608 Tests aus er-logic und drei gezielte Tests der Spawn-Funktion sind
+bestanden. Der Windows-x64-Cross-Build wurde auf die Offset-Auswahl, die
+Zeigerprüfung und die DLL-Importe geprüft. Der Spieltest steht aus.
+
+Quellen
+
+Peliarch-Client 1.0.2.1
+https://git.peliarch.ca/alaric/er-archipelago-public/releases/tag/v1.0.2.1
+
+Korrektur des WorldChrMan-Layouts in fromsoftware-rs
+https://github.com/vswarte/fromsoftware-rs/commit/5baf0dd2243e2affa8bc436d27d7305c2eab9490
+
+Gegenprüfung des Offsets anhand eines in 2.7.2.0 getesteten NPC-Spawners
+https://github.com/ArialSenki/NpcSpawner/blob/main/mod/src/game.rs
+
+Spawn-Fix.patch enthält die Änderungen gegenüber dem offiziellen Quellarchiv.

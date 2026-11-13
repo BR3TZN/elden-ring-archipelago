@@ -1,0 +1,303 @@
+# Known Issues -- v0.6.0.11
+
+Current as of **v0.6.0.11** (2026-09-14).
+
+Everything we currently know about, what it looks like in play, and what (if
+anything) to do about it.
+
+The short version: **no open issue is known to make a seed unwinnable.** Entries
+that could do so in principle say so directly. Most reports came from players on
+Nexus or Discord. If something looks wrong and is *not* on this list, tell us
+and bring your YAML and spoiler log.
+
+For what has been *fixed*, see [CHANGELOG.md](CHANGELOG.md); it is written for
+players, one section per fix, and it is the honest record.
+
+## Experimental Mario mode (v0.6.4)
+
+Mario mode is optional and off by default. All nine move families passed a live
+before/after unlock test, along with randomized pickups, overlay input capture,
+reconnect, grace travel and death/respawn. One Tibia Mariner defeat paid its AP
+sweep rewards and produced Mario's star. These results do not establish every boss
+or a complete ending run.
+
+- Rykard, required multi-phase bosses, ending completion, region-lock kicks,
+  complete slot/history replay and coin healing have not been tested in game.
+- The combined-icon helper passed texture checks; its output and the new
+  statue/Goldmask interaction have not been checked in a live session.
+- Generate a new Mario seed for Law of Regression's statue route. Updating an old
+  seed's DLL cannot add the reserved quest item to its pool.
+- After changing AP rooms, restart with the correct save/room identity before
+  ordinary delivery resumes. A move reset does not clear the save-protection guard.
+- Mario uses his own health and percentage-based combat. Ordinary flask healing,
+  weapon damage upgrades and native ability locks do not govern that moveset.
+  Unsupported links, traps and options are rejected during generation.
+- F7 and automatic unstuck lifts bypass move unlocks. Mario moves are not used as
+  Archipelago traversal or goal requirements.
+
+Use the optional Mario companion from the same release and follow its README.
+It supplies setup tools and the compatible Mario DLL; you supply your own ROM and
+build the private game package locally. Keep ordinary AP profiles separate.
+
+## Great Runes
+
+- **A received Great Rune cannot be equipped at a grace, and its Divine Tower shows no
+  prompt** (client #316). The client delivers the row the boss drops (the unrestored key item)
+  and sets the "restored" flag; the grace menu only lists the equippable row the Divine Tower
+  would award, and the pre-set flag is what makes the tower's altar skip its prompt. The rune
+  counts for Leyndell and for the goal (both read names and flags, not the equip menu), so
+  progression is not blocked -- only the rune's passive buff is missing. Do **not** use
+  `!give 0x400000c0`-style commands on a real save to work around it: whether that row lands
+  on Tarnished Edition is the open question, and the probe belongs on a throwaway character.
+  The delivery change remains tracked in client #316.
+
+- **Inventory detection fix (client #638, included in the v0.6.0.1 client update):**
+  after a Twin Maiden Husks or Miriel hand-in, the old scan could miss occupied
+  slots beyond the key list's live-entry count. A held rune then appeared absent
+  to the client, causing repeated refused re-grants after loads. Check the game's
+  Key Items tab before trying `!give`. Updated builds inspect the allocated list
+  and log a detected item with `observed at key-list index N >= key_items_len`.
+  This diagnosis does not mean every missing-item report has the same cause.
+
+## Region locks and reachability
+
+- **The Mountaintops can be entered early, through two graces inside Leyndell**
+  (#323). Two of Leyndell's graces lead into Mountaintops territory without
+  passing the Lock check, so a region you do not hold can be reached mid-run.
+  This is a sequence break, not a soft-lock -- nothing is lost and the run stays
+  winnable. What to do: if you care about the intended progression, do not warp
+  onward from those two graces until the Lock arrives.
+
+- **Consecrated Snowfield rides the Mountaintops Lock** (#406), so its checks
+  count as in-logic as soon as you hold that Lock, without the Rold medallion
+  path vanilla would ask for. In practice the Lock lights the graces and you can
+  warp in, so the checks really are reachable; the logic is looser than the map.
+  What to do: nothing.
+
+- **Dying in a Leyndell boss arena can respawn you in Maliketh's arena, or replay
+  the Ashen Capital cutscene** (Mrks, 2026-09-13). `capital_reconciler` (on by
+  default) re-runs the game's burn bookkeeping on every load, and a load that
+  lands while the map-version flag is still off can arm vanilla's post-burn
+  warp: a death to Godfrey sends you to Maliketh's arena and then the
+  Roundtable, and a load in Gideon's arena plays the Ashen Capital cutscene.
+  Nothing is lost -- your checks, Locks and items are untouched, and the
+  Royal Capital stays yours -- it is a wrong respawn, not a wrong region. What
+  to do: warp back from the Roundtable and carry on. If it keeps happening on
+  your seed, set `capital_reconciler: false` for that run (see the burn note
+  under By-design behaviours). A load-window hold on the client side is the
+  planned fix; a client log from a run that hit this would help build it.
+
+- **Some region data is wrong.** East Divine Tower loot files under Altus, and
+  the Sage's Cave and Wyndham graces are missing (#324). The Moonlight Altar is
+  keyed to Liurnia (#410), which files Ranni's late checks under an early
+  region. What to do: nothing -- but it is why a check occasionally shows up
+  under a region that surprises you.
+
+- **A few out-of-region check lots pay out nothing** (#329). A lot that is not a
+  check in your seed can still be repointed, and then hands you neither the
+  Archipelago item nor the vanilla one. What to do: nothing; those lots are
+  never allowed to hold progression, so the cost is a missed pickup.
+
+## Items and checks
+
+- **Some NPC gifts and quest pickups are not randomised yet** (#217, #218). A
+  batch of pickups never got a location built for them, so the game hands you
+  the vanilla item and nothing registers as a check. The one you are most likely
+  to notice is **Roderika at Stormhill Shack** -- neither her Spirit Jellyfish
+  Ashes nor the Sitting Sideways gesture is a check. Others in the batch include
+  the Flask of Wondrous Physick, the Tarnished's Furled Finger and the Tailoring
+  Tools. What to do: nothing, and nothing is lost -- you still get the vanilla
+  item, there is just no multiworld check attached.
+
+- **Fia's Cursemark of Death is never in the pool, so a seed cannot strand
+  Fortissax -- but a run started before 2026-07-28 might have.** The Cursemark
+  is a protected key item and stays on its vanilla lot, so the Fia questline
+  and the Lichdragon Fortissax check are always reachable on a current seed.
+  If you are on an older seed and Fia will not take you to the Deeproot
+  fight, the rescue is a console command: `!give 0x40001FFF 1` hands you the
+  Cursemark, then talk to Fia. It is safe because the item is not a
+  multiworld item and nothing else in the seed depends on it.
+
+- **Redmane Castle stays in festival form after Radahn is dead** until you
+  talk to Jerren in the chapel and reload. That is the game's own rule, not
+  ours: the client forces the festival on so Radahn is always fightable, and
+  the game only ends it after the Jerren talk on a load from outside the
+  castle. The plaza duo (Crucible Knight and Misbegotten Warrior) is
+  unavailable while the festival is on. What to do: kill Radahn, talk to
+  Jerren, warp out and back.
+
+- **Evergaol boss rewards are withheld until you teleport out** (#296). The
+  reward lands when you leave the arena rather than when the boss dies, and
+  `auto_equip` can miss the weapon when it finally arrives. What to do: leave
+  the Evergaol; the item follows you out.
+
+- **Dropping an item and picking it back up does not return it** (#225).
+  What to do: do not drop multiworld items.
+
+- **Miriel does not reliably learn from prayerbooks and scrolls; Brother Corhyn
+  does.** Reported from a large async (2026-09-03): handing a prayerbook to
+  Miriel in the Church of Vows did not unlock the incantations in her shop,
+  while the same books handed to Corhyn worked. Not yet reproduced on our side
+  and the cause is unknown. Sellen and Seluvis are unverified either way. What
+  to do: give every prayerbook to **Brother Corhyn** (Roundtable Hold, later
+  Altus Highway junction and Goldmask's side) and every scroll to a sorcerer
+  whose shop you have confirmed grows; keep Miriel as the fallback only. A
+  book already given to Miriel is not lost to the multiworld -- the check fired
+  on pickup -- but the spells it teaches may stay off her list.
+
+- **Dragon Communion can ask an absurd number of Dragon Hearts** (#231) when a
+  Great Rune is rolled into one of its slots. What to do: skip that slot; no
+  progression is placed there.
+
+- **A check's landmark can be approximate even when the check is real.** Some
+  rewards have no world coordinate at all: they come from a script, merchant,
+  boss, or NPC rather than a placed treasure. Their `near <grace>` wording is a
+  navigation hint, not a measured distance. This can produce several genuine
+  checks with the same grace and a `(1)`, `(2)`, and so on suffix (#695). Other
+  descriptors can choose a grace across a region border, and 512 checks say
+  `(region unconfirmed)` explicitly (#330, #349, #418, #338). **What to do:**
+  trust the region prefix and tracker over the landmark. Repeated numbered rows
+  are separate checks, not padding.
+
+## Client and platform
+
+- **A crash on some AMD systems** (#411). An ACCESS_VIOLATION inside
+  `amdxc64.dll`, reached through the overlay's D3D12 present path. Seen in one
+  player's log across two startups. What to do: if it happens to you, keep the
+  `crash-<pid>.txt` the client writes next to itself and attach it to a report --
+  that file is what identifies these.
+
+- **"Could not translate RVA to VA" at startup** (#222 on Linux, #475 on
+  Windows). The client could not find one of the game's internal objects, and
+  the game can only be exited. Despite the wording it is almost never about
+  your game version: the build check runs first and fails with its own
+  `Unsupported game version` text, so seeing *this* message means your build is
+  one we support.
+
+  **On Windows it is a startup race, not something you did.** The client can ask
+  for the game's task scheduler before the game finishes registering it. Disk
+  speed, machine load, or another overlay can shift that timing, so the error
+  may appear after several successful launches. **What to do: quit and launch
+  again.** It usually works on the next attempt. If it happens every launch,
+  attach `archipelago-<date>.log` from the client's folder and list the other
+  DLL mods you loaded. The log appends across launches; use the final
+  `SESSION START` block. (This error stops the overlay from loading, so the
+  overlay's **Export client log** is not available here; send the raw file.)
+
+  **On Linux it happens every launch** and is a different problem: Proton is
+  not supported yet, so play on Windows for now.
+
+## Tracker
+
+- **The tracker counts gated regions as in-logic** before you hold the Great
+  Runes or the Academy Glintstone Key (#297). The graces correctly do *not*
+  light -- the gate itself works -- the tracker is just optimistic about what
+  you can currently reach. What to do: nothing; believe the graces.
+
+## Shadow of the Erdtree
+
+DLC seeds work, and the DLC's 11 regions behave like any other region. It is
+still the less-travelled path: the base game is better tested and remains the
+smoother first run.
+
+🛑 **`enable_dlc` is ON in the apworld's own defaults.** The shipped
+`EldenRing.yaml` sets it to `false`, and four of the six wizard presets also pin
+it off. An empty `Elden Ring: {}` section, the wizard's blank **Defaults** card,
+and the `vanilla_deathlink` preset leave the apworld default unchanged, so they
+include the DLC. If you do not own Shadow of the Erdtree, set
+`enable_dlc: false` explicitly.
+
+- **The Shadow Keep church-basement grace can warp you in before the water is
+  drained** (#123). Fast-travelling to Church District Lower / Scadutree Base
+  before draining the keep can drop you onto lethal moving platforms. What to
+  do: avoid warping there until you have drained Shadow Keep.
+
+- **Jagged Peak grants 3 of its 5 graces** (#370), which may over-skip toward
+  the summit. What to do: nothing.
+
+## By-design behaviours
+
+These are deliberate, not bugs -- listed so you can tell them apart from the
+real thing. No report needed for anything below.
+
+- **The item pool is CURATED, so vanilla items are missing by design on default
+  settings.** This is already enabled; it is not an option you accidentally
+  switched on. Three systems change the vanilla spread:
+
+  1. `curated_filler` reallocates every check that would have paid a Rune or
+     junk consumable. By default, about two fifths of that space becomes real
+     weapons, armor, spells, talismans, and Ashes of War.
+  2. Farmable enemy drops have no one-time flag, so they cannot become checks.
+     Their contents are rerolled per seed at vanilla drop rates.
+  3. The presence floor adds selected physick tears and smithing bell bearings
+     when their home regions are sealed. It does not promise the rest of the
+     vanilla pool.
+
+  **What to do:** set `vanilla_pool: true` for a vanilla-like spread. Giving
+  `junk` weight in `curated_filler` only preserves the original contents of
+  those junk checks; the presence floor still applies. The player guide's
+  **"What fills your junk checks"** section explains the full recipe.
+
+  An item absent from the pool matches this by-design entry and needs no report.
+  A check that gives the vanilla item or nothing is a real defect; current cases
+  are listed above under #217, #218, and #329.
+
+- **`merchant_bell_logic` is RESERVED and inert.** The bell-to-shop mapping
+  lives in engine code rather than in any param or EMEVD, so it cannot be
+  derived from game data. The option exists so configs stay forward-compatible;
+  shop checks are assumed reachable regardless of what you set. Leave it off.
+
+- **Location-keyed sweeps and sweep-lock gates are empty on purpose.** Only
+  flag-keyed dungeon sweeps fire -- kill the boss and the dungeon's other checks
+  register. Dungeon sweeps themselves work normally.
+
+- **About 1% of checks pay a Rune instead of a real item.** A small set of
+  checks whose item names are not present in the game's text tables -- quest
+  notes, a source typo, non-item text -- fall back to a Rune in the shuffle.
+
+- **Great Runes are "useful", not progression**, unless
+  `ending_condition: great_runes` requires them, in which case they become
+  progression and are placed reachably.
+
+- **Burning the Erdtree switches off Leyndell's grace warp points.** The burn
+  is the game's own event and one of the things it does is clear the capital's
+  fast-travel graces, so immediately afterwards you cannot warp into Leyndell
+  even holding its Lock. `capital_reconciler` (on by default) still gives you
+  the Royal Capital back -- it is the *warp shortcut* that is gone, not the
+  region. What to do: walk in from Altus through the main gate (the Great Rune
+  wall is unchanged) and touch a grace; the warp point comes back with it. If
+  you would rather have vanilla's one-way burn, set `capital_reconciler: false`
+  -- Royal Capital checks are then barred from holding progression, so the seed
+  stays winnable either way.
+
+- **`(region unconfirmed)` in a check name is the label being honest**, not a
+  defect. Those checks are never allowed to hold progression, so a wrong guess
+  cannot strand a run.
+
+## Reporting
+
+Useful reports include: your YAML, the spoiler log, the client log, and -- if
+the game crashed -- the `crash-<pid>.txt` written next to the client. From the
+v0.6.5.5 client, **Export client log** in the overlay's menu bar (or typing
+`!exportlog`) packages the client log and a recent crash report into one small
+file, opens Explorer on it, and copies its path. Relaunch first if the game
+crashed: the export includes the previous session. The single
+most valuable thing you can say is what you did immediately before it happened.
+
+
+## Map progression rings during pan and zoom
+
+Progression rings can lag behind native pins while panning or zooming, despite starting
+in the correct positions. This visual issue is non-blocking for v0.6 and is tracked in
+[issue #1432](https://github.com/4laric/er-archipelago/issues/1432).
+
+## Foreign items may show a Telescope icon
+
+The current bundle does not include the optional AP Flower atlas or installer.
+Foreign item placeholders may therefore show the vanilla Telescope icon.
+Their `AP: <item>` names identify them, and the icon does not change item
+delivery or checks. If an older Flower override was installed separately,
+manage those menu files with the tool that installed them. Do not delete a
+whole shared mod package to change an icon.
+
+

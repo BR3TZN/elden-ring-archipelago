@@ -1,0 +1,179 @@
+diff --git a/crates/eldenring-archipelago/src/traps.rs b/crates/eldenring-archipelago/src/traps.rs
+--- a/crates/eldenring-archipelago/src/traps.rs
++++ b/crates/eldenring-archipelago/src/traps.rs
+@@ -126,6 +126,16 @@
+ /// arriving. Folding a half-delivered spawn back into the queue would make it eligible for the
+ /// overdue warning and for re-firing, which is a different and worse bug than the one being fixed.
+ static SPAWN_BURST: Mutex<Option<er_logic::spawn_burst::SpawnBurst>> = Mutex::new(None);
++static SPAWN_CREATOR_UNAVAILABLE: AtomicBool = AtomicBool::new(false);
++
++fn issue_spawn(wcm: &mut WorldChrMan, request: &ChrDebugSpawnRequest) -> bool {
++    let issued = wcm.spawn_debug_character(request);
++    let was_unavailable = SPAWN_CREATOR_UNAVAILABLE.swap(!issued, Ordering::Relaxed);
++    if !issued && !was_unavailable {
++        log::warn!("trap spawn: debug character creator unavailable; deferring spawn");
++    }
++    issued
++}
+ 
+ /// Queue a trap that arrived as an AP item. Called from the receive loop, which knows the NAME.
+ ///
+@@ -407,8 +417,8 @@
+     let now = now_ms();
+     let mut burst = er_logic::spawn_burst::SpawnBurst::new(spec, baseline, now);
+     // This tick's copy. The creator drains the slot before the next one is written.
+-    if burst.next_request(now).is_some() {
+-        wcm.spawn_debug_character(&request);
++    if burst.next_request(now).is_some() && !issue_spawn(wcm, &request) {
++        return false;
+     }
+     log::info!(
+         "trap spawn: c{} x{} opening -- npc={} think={} chara_init={} at ({}, {}, {}), {} already \
+@@ -530,7 +540,9 @@
+         pos_y: pos.1,
+         pos_z: pos.2,
+     };
+-    wcm.spawn_debug_character(&request);
++    if !issue_spawn(wcm, &request) {
++        return false;
++    }
+     // Only now is the issue banked: an early return above leaves the burst exactly as it was.
+     *slot = Some(burst);
+     true
+diff --git a/vendor/fromsoftware-rs/crates/eldenring/src/cs/world_chr_man.rs b/vendor/fromsoftware-rs/crates/eldenring/src/cs/world_chr_man.rs
+--- a/vendor/fromsoftware-rs/crates/eldenring/src/cs/world_chr_man.rs
++++ b/vendor/fromsoftware-rs/crates/eldenring/src/cs/world_chr_man.rs
+@@ -4,6 +4,7 @@
+ 
+ use crate::cs::{CSEzTask, CSEzVoidTask};
+ use crate::position::HavokPosition;
++use crate::rva::{self, ERGameVersion};
+ use crate::{ChainingMap, DLList, DLMap, UnkDLTree};
+ use crate::{DLVector, cs::ChrIns};
+ use shared::{F32Vector4, OwnedPtr, Subclass, Superclass};
+@@ -80,9 +81,10 @@
+     unk1e5f8: usize,
+     unk1e600: usize,
+     unk1e608: [u8; 0x40],
+-    pub debug_chr_creator: OwnedPtr<CSDebugChrCreator>,
++    debug_chr_creator: Option<NonNull<CSDebugChrCreator>>,
+     unk1e650: usize,
+-    unk1e658: usize,
++    // 2.7.2.0 shifts the creator by 0x10 (fromsoftware-rs commit 5baf0dd2).
++    debug_chr_creator_ww2720: Option<NonNull<CSDebugChrCreator>>,
+     unk1e660: usize,
+     unk1e668: usize,
+     unk1e670: [u8; 0x18],
+@@ -118,6 +120,11 @@
+     chr_ins_post_physics_safe_task: CSEzVoidTask<CSEzTask, Self>,
+ }
+ 
++const _: () = {
++    assert!(std::mem::offset_of!(WorldChrMan, debug_chr_creator) == 0x1e648);
++    assert!(std::mem::offset_of!(WorldChrMan, debug_chr_creator_ww2720) == 0x1e658);
++};
++
+ impl WorldChrMan {
+     pub fn chr_ins_by_handle(&self, handle: &FieldInsHandle) -> Option<&ChrIns> {
+         let chr_set_index = handle.selector.container() as usize;
+@@ -133,28 +140,33 @@
+         chr_set.chr_ins_by_handle_mut(handle)
+     }
+ 
+-    pub fn spawn_debug_character(&mut self, request: &ChrDebugSpawnRequest) {
++    /// Queue a spawn in the game's creator. Returns false if the creator is unavailable.
++    pub fn spawn_debug_character(&mut self, request: &ChrDebugSpawnRequest) -> bool {
++        let slot = match rva::game_version() {
++            ERGameVersion::Ww2720 => self.debug_chr_creator_ww2720,
++            _ => self.debug_chr_creator,
++        };
++        let Some(mut creator) = slot.filter(|ptr| ptr.is_aligned()) else {
++            return false;
++        };
++        // SAFETY: this version's WorldChrMan slot holds the game's live creator. The caller
++        // supplies exclusive access to WorldChrMan on the game thread.
++        let creator = unsafe { creator.as_mut() };
++
+         let mut name_bytes = format!("c{:0>4}", request.chr_id)
+             .encode_utf16()
+             .collect::<Vec<_>>();
+-
+         name_bytes.resize(0x20, 0x0);
+-
+-        self.debug_chr_creator
+-            .init_data
+-            .name
+-            .clone_from_slice(name_bytes.as_mut());
+-
+-        self.debug_chr_creator.init_data.chara_init_param_id = request.chara_init_param_id;
+-        self.debug_chr_creator.init_data.npc_param_id = request.npc_param_id;
+-        self.debug_chr_creator.init_data.npc_think_param_id = request.npc_think_param_id;
+-        self.debug_chr_creator.init_data.event_entity_id = request.event_entity_id;
+-        self.debug_chr_creator.init_data.talk_id = request.talk_id;
+-
+-        self.debug_chr_creator.init_data.spawn_position =
++        creator.init_data.name.copy_from_slice(&name_bytes);
++        creator.init_data.chara_init_param_id = request.chara_init_param_id;
++        creator.init_data.npc_param_id = request.npc_param_id;
++        creator.init_data.npc_think_param_id = request.npc_think_param_id;
++        creator.init_data.event_entity_id = request.event_entity_id;
++        creator.init_data.talk_id = request.talk_id;
++        creator.init_data.spawn_position =
+             F32Vector4(request.pos_x, request.pos_y, request.pos_z, 0.0);
+-
+-        self.debug_chr_creator.spawn = true;
++        creator.spawn = true;
++        true
+     }
+ }
+ 
+diff --git a/vendor/fromsoftware-rs/crates/eldenring/src/rva.rs b/vendor/fromsoftware-rs/crates/eldenring/src/rva.rs
+--- a/vendor/fromsoftware-rs/crates/eldenring/src/rva.rs
++++ b/vendor/fromsoftware-rs/crates/eldenring/src/rva.rs
+@@ -16,7 +16,7 @@
+ use fromsoftware_shared::game_version::{GameVersion, LANG_ID_EN, LANG_ID_JP};
+ 
+ #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+-enum ERGameVersion {
++pub(crate) enum ERGameVersion {
+     Ww2700,
+     Jp2701,
+     /// 🛑 FORK ADDITION. Worldwide 2.7.1.0 (the 2026-09-08 patch). Generated with this repo's
+@@ -60,20 +60,27 @@
+     }
+ }
+ 
++fn detected_game() -> &'static (ERGameVersion, RvaBundle) {
++    static DETECTED: LazyLock<(ERGameVersion, RvaBundle)> = LazyLock::new(|| {
++        let module = unsafe {
++            PeView::module(GetModuleHandleA(PCSTR(std::ptr::null())).unwrap().0 as *const u8)
++        };
++        let version = ERGameVersion::detect(&module).unwrap_or_else(|e| panic!("{e}"));
++        (version, version.rvas())
++    });
++
++    &DETECTED
++}
++
++pub(crate) fn game_version() -> ERGameVersion {
++    detected_game().0
++}
++
+ /// Returns the RVA bundle for the current executable region and version.
+ ///
+ /// This will panic if the current executable isn't supported by this package.
+ pub fn get() -> &'static RvaBundle {
+-    static RVAS: LazyLock<RvaBundle> = LazyLock::new(|| {
+-        let module = unsafe {
+-            PeView::module(GetModuleHandleA(PCSTR(std::ptr::null())).unwrap().0 as *const u8)
+-        };
+-        ERGameVersion::detect(&module)
+-            .unwrap_or_else(|e| panic!("{e}"))
+-            .rvas()
+-    });
+-
+-    &RVAS
++    &detected_game().1
+ }
+ 
+ #[cfg(test)]

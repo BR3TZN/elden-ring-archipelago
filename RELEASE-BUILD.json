@@ -1,0 +1,206 @@
+{
+  "schema_version": 1,
+  "version": "1.0.2",
+  "prerelease": null,
+  "world_commit": "f81abbb92bab6f629de3f24e9b746bbc8c53f564",
+  "world_dirty": false,
+  "client_pin": "b8faac6864689d82e4cf5c111be853dcf3b658e2",
+  "files": [
+    {
+      "path": "ATTRIBUTION.md",
+      "sha256": "e2273d36aa50a8dec6d9c782f63cf339181a0cec7935e233086bc0791bec1f86"
+    },
+    {
+      "path": "BLURB-v0.6.0.md",
+      "sha256": "a2f5d116c4c467d1de0e57c3d656fab916050b21a35fd2284ea3dd068293b0e5"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "sha256": "0b05d279da7ea3d3008d73413e3d625930addf4ebcd5ce63c059a14560b6fb6c"
+    },
+    {
+      "path": "DISTRIBUTION.md",
+      "sha256": "2186085cea7aff025435dccbc527162e4bfd5f616af3539d327311f6825b69f2"
+    },
+    {
+      "path": "Elden-Ring-Archipelago-Player-Guide.md",
+      "sha256": "a7622270c8f49d4289ce7fa00cd7353a6aa8e41b976e4761cbf5363121b60ac2"
+    },
+    {
+      "path": "EldenRing-Quickstart.yaml",
+      "sha256": "6d2fa55950458aeb9acb165e83cc93bb4726afa29b8b29a2c5cc1d99e09dca73"
+    },
+    {
+      "path": "eldenring.apworld",
+      "sha256": "e29b57b5a4c5939a2d64062c4523c33796bbf0cc858c4d44657b78297255160a"
+    },
+    {
+      "path": "EldenRing.yaml",
+      "sha256": "4a273cee2e4c64658b332da8f56e0f98b8d2b3f82f2c3db0a0edf2240a3cd2ec"
+    },
+    {
+      "path": "ENEMY-AND-STARTING-CLASS-RANDOMIZATION.md",
+      "sha256": "095edee37a85fcde7f5e5452431d1fcaf5936b58fa0e3d3c33ab0544425f00de"
+    },
+    {
+      "path": "GETTING-UNSTUCK.md",
+      "sha256": "9db52197f97e4d3e43939df8f7798bd3c19cc3415d73f5381330111889144287"
+    },
+    {
+      "path": "KNOWN-ISSUES.md",
+      "sha256": "4eee16ae4f7e373ef48feff8c10caf2985cbae18165de08a18fe93a730467aef"
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "c8db7070b256037ad339aa6ccf823f4a16ab1aef0b091297f6a89a9a0b113e8e"
+    },
+    {
+      "path": "me3/ap.me3",
+      "sha256": "07de332dbc7f432edee7401ca0b85baccd8170e97c4e9542dd87643deb83a118"
+    },
+    {
+      "path": "me3/apconfig.json",
+      "sha256": "f1ab134dcdb0f1c53094a78a71b89a20e06c1b75dcfe308b5d91fb83ddb8c469"
+    },
+    {
+      "path": "me3/check_lots_table.json",
+      "sha256": "9ba186c531b6255925f2e27ec34288800b8f7fd0c3074bf550b67ad1dbb3a65c"
+    },
+    {
+      "path": "me3/eldenring_archipelago.dll",
+      "sha256": "f7390382c931da870c73bf5989f7a14005e5609f414218d65937f09635c20d1a"
+    },
+    {
+      "path": "me3/install-ap-flower.ps1",
+      "sha256": "81e07d0dfb4a8792e797803c36ddda34d960f97e022dc5ba8260ad0186da4490"
+    },
+    {
+      "path": "me3/install-into-matts-rando.ps1",
+      "sha256": "6270201fc8600c24d2bece03a035312af02c410b936b0a8bf6b27e47ce91c6b9"
+    },
+    {
+      "path": "me3/install_ap_flower.py",
+      "sha256": "b5f7c043a2d711dbf76f0b60b1da41f05e7cd120c860fedf32371a80b3b4a940"
+    },
+    {
+      "path": "me3/install_into_matts_rando.py",
+      "sha256": "c41aa3567e1a040dab884a8c40a3f92f41caab82f1aee0b7caa543f43af73162"
+    },
+    {
+      "path": "me3/licenses/adapter.txt",
+      "sha256": "69f2d5a059eea1ae05dbf9f8f3a21ba2e2518654ac0461ba15476cf990f8b1a1"
+    },
+    {
+      "path": "me3/licenses/minhook.txt",
+      "sha256": "4f21f857550d7be854da6ea5f2da4e6775ca4e3fbb535e4f3d961c47d0bf3335"
+    },
+    {
+      "path": "me3/MapForGoblins.AP.ini",
+      "sha256": "257e4f990b76e6cc696d92e2c972db819719062936314677b9bb74c818b16e91"
+    },
+    {
+      "path": "me3/MapForGoblins.dll",
+      "sha256": "fd2ae25b0e84471e6706c7aa437b9cc6407546bf20fcb792a91a63d2d314c052"
+    },
+    {
+      "path": "me3/MapForGoblins.ini",
+      "sha256": "dcd57f2e9badd134d634148fefc42066b116749af3965c9f7d79d5370825bc0f"
+    },
+    {
+      "path": "me3/MapForGoblins.upstream.dll",
+      "sha256": "3dccfb5e4915be0783fd95f3aadd9a4bd7c71a9d043e960542a53bb226459ef6"
+    },
+    {
+      "path": "me3/MFG-LICENSE.txt",
+      "sha256": "930788e08280183dcda187eeb584c5db0aa3d19b2a160377e8281b52aa26b8bb"
+    },
+    {
+      "path": "me3/MFG-PROVENANCE.json",
+      "sha256": "25761b76e67d4f32d1ccc0da558ebeb3d1bf197353f2453a568174e454d44e59"
+    },
+    {
+      "path": "me3/shoplineup_flags.json",
+      "sha256": "b6dcc9ce76604ef528fa0cce4380eb9d9d39307e2751a41066d697f454580cfe"
+    },
+    {
+      "path": "me3/update-er-archipelago.ps1",
+      "sha256": "df429651aa5f05d1ec21d40407afb8176179060ae74af2b65e4dbb84aeab428d"
+    },
+    {
+      "path": "me3/update_er_archipelago.py",
+      "sha256": "3ba416c65b9fc2caf1e76449cc6fcf1c56f861f2c9e2540a09803c96495e3cfb"
+    },
+    {
+      "path": "MFG-VERSION.json",
+      "sha256": "a331b1d9817d6cc44e83889f41853ad64cbd1cec5e9aa21afdcb2ad6f2fcfab8"
+    },
+    {
+      "path": "PROVENANCE.md",
+      "sha256": "32dee0970c11690d85cc8a333b7cd47d280353335fb1478f7d508c5f4cab16cd"
+    },
+    {
+      "path": "RELEASE-NOTES-v0.2.md",
+      "sha256": "f907567b3ffff8eaed0657c1c1c62964f6a9d179beb8468fb4c7d91fed23ad89"
+    },
+    {
+      "path": "RELEASE-v0.6.0.md",
+      "sha256": "94bf432f53a07c9d4f32193b8fc770c560ac2e8c784d71618aa235f2f35c7d6c"
+    },
+    {
+      "path": "screenshots/matt-01-item-randomizer-OFF.png",
+      "sha256": "8ce72f548bc5b601a4a4afc4f818e2d0a6c6ef8bd2604b857c7d87d3f174c1e1"
+    },
+    {
+      "path": "screenshots/matt-02-enemy-randomizer-ON.png",
+      "sha256": "bb16e239dcc460272823e3653cfcecf104b4b91c3d088ab7b960563adaa9eb5d"
+    },
+    {
+      "path": "screenshots/matt-02b-misc-options-starting-class.png",
+      "sha256": "805201c2f9aa1b53f9735ad0d112fe107832dec1ba8c9349cd2aff53af9fbe00"
+    },
+    {
+      "path": "screenshots/matt-03-dll-mods-dialog.png",
+      "sha256": "4a02b681f88ec59fbbada80dea25108db3670f038039fc96d8778993eece831d"
+    },
+    {
+      "path": "screenshots/matt-04-select-client-dll.png",
+      "sha256": "2e6627ead6ca5523dfdde35d49e44e68fe0f3b5673ad29b60b6ab3c32764dd9c"
+    },
+    {
+      "path": "screenshots/matt-05-client-dll-added.png",
+      "sha256": "d019d5df99238ece719d81e66945222309a5656d4bfbb3c70f480edee8abe042"
+    },
+    {
+      "path": "screenshots/matt-06-randomize-enemies.png",
+      "sha256": "e61c1d3ed20b968d8a43aaf3c2ff01b42a462313911d33b60a7e89e9f94c3bf4"
+    },
+    {
+      "path": "screenshots/matt-07-blank-seed-and-launch.png",
+      "sha256": "75faf505359c7f5d1be998a82a9cead73dcc323f316fe1b6ddeb8f50dfab7649"
+    },
+    {
+      "path": "screenshots/matt-08-enemy-tab-detail.png",
+      "sha256": "b2af978238519060e570a732af15eea364110ecfa6bfc4cf81fc3aa1fe13a4aa"
+    },
+    {
+      "path": "screenshots/overlay-connected.png",
+      "sha256": "3174e467c11b929063d157287820173a9e3c1089f991f3b1b5e0e926811cf5a7"
+    },
+    {
+      "path": "screenshots/README.md",
+      "sha256": "2f05e8c635075f57ca10ba22ba9e7ed22c3def861033c79763ea65df1bfca242"
+    },
+    {
+      "path": "SCREENSHOTS.md",
+      "sha256": "c9aa0090b053b3a2c038d7993bfbf42d8b5b4b4bec45f1762b1d721197c148a6"
+    },
+    {
+      "path": "SETUP.md",
+      "sha256": "84a73591c9b3bbcd1c36ace6c62f62a25b392e001fa306b726b3b62de338cc4e"
+    },
+    {
+      "path": "TROUBLESHOOTING.md",
+      "sha256": "94a9c4717be4bc0feb111cc937385206283184ddffe433c46320b6887e1b4c41"
+    }
+  ]
+}

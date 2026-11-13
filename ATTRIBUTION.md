@@ -1,0 +1,103 @@
+# Attribution, Licensing & Provenance
+
+## License
+
+This project adopts the **upstream Archipelago license -- MIT**. Archipelago core
+is MIT-licensed, and both shipped components follow it:
+
+- **Runtime client** (`eldenring_archipelago.dll`, the `eldenring-archipelago`
+  Rust crate) -- MIT, original work.
+- **apworld** (`eldenring.apworld`) -- MIT; a from-scratch, data-derived world
+  (see Provenance below).
+
+MIT grants the right to use, modify, and redistribute, including in derivative
+works, provided the copyright notice and license text are retained. You supply
+your own copy of Elden Ring; this release ships **no FromSoftware game assets**.
+
+## Credits
+
+- **nex3** -- for the Archipelago Rust ecosystem (`archipelago_rs`) that the
+  runtime client builds on.
+- **vswarte** -- for the FromSoftware reverse-engineering / tooling groundwork the
+  client's live-game integration relies on.
+- **The Archipelago project and community** -- for the multiworld framework, the
+  MIT-licensed core, and the ecosystem conventions this release follows.
+
+## MapForGoblins companion
+
+The v0.6 release bundles a source-built vanilla-profile version of
+[4laric's MapForGoblins fork](https://github.com/4laric/ERR-MapForGoblins-DLL),
+based on [VirusAlex's DLL edition](https://github.com/VirusAlex/ERR-MapForGoblins-DLL).
+Credit also belongs to Gacsam's Goblin-ERR lineage and the dependencies named in the
+upstream license. The full upstream notices are retained verbatim in
+`me3/MFG-LICENSE.txt`; keep that file with redistributed copies. The exact source/build
+identity and artifact hashes are recorded in `me3/MFG-PROVENANCE.json`.
+
+This companion is separately attributed upstream software, not original AP client code.
+Its inclusion does not change the licensing of the APWorld or the separately licensed
+wiki evidence below. MapForGoblins placements are accepted reference data for the
+location audit; that does not establish every check's access conditions.
+
+## Elden Ring Wiki quest evidence
+
+`greenfield/questline_cc_wiki.tsv`, the CC-wiki rows in
+`greenfield/questline_model.tsv`, and their rendered section in
+`er-archipelago-questline-dag.html` adapt quest ordering facts from the
+[Elden Ring Wiki](https://eldenring.wiki.gg/), licensed under the
+[Creative Commons Attribution-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by-sa/4.0/).
+Every evidence row names the source page, exact revision id and timestamp, and links to that pinned
+revision. The adapted claims and the generated compilation are distributed under CC BY-SA 4.0;
+the rest of the project's original code remains MIT-licensed.
+
+## Provenance -- why v0.2 is a clean rebuild
+
+The whole point of the v0.2 rebuild is **provenance cleanliness**. Unlike the
+v0.1 world -- whose location set traced upstream through another modder's
+apworld -- the v0.2 apworld is built **from scratch against vanilla Elden Ring
+game data**, and ships **none** of the following:
+
+- **No non-free FromSoftware content.** The apworld carries no game assets, no
+  regulation data, no map/message files -- only derived tables (event flags, item
+  ids, region mappings) computed from data you already own by owning the game.
+- **No third-party randomizer config or code.** No location-name set, no
+  location->key or location->target maps, and no name-keyed rule modules are copied
+  from any other randomizer or apworld. Every rule keys off the world's **own**
+  data columns -- region / map-id / event-flag / item-name pulled from vanilla
+  params (`ItemLotParam`, `ShopLineupParam`), MSB, and EMEVD.
+
+The separately licensed wiki evidence above is documentation and corroboration only: no world
+module imports it, and it creates no access rule.
+
+This is a hard architectural constraint, not a claim after the fact. It is spelled
+out in full — the five non-negotiables and how CI enforces them — in
+`PROVENANCE.md`.
+
+The runtime client is original work that reads only public param data to map
+checks to event flags. Because the shipped apworld is data-derived and the client
+is original MIT code, those two components are redistributable under MIT. The companion and evidence notices above also apply.
+
+## thefifthmatt -- Elden Ring Item and Enemy Randomizer
+
+For enemy randomization and randomized starting loadouts we point players at
+**thefifthmatt's Elden Ring Item and Enemy Randomizer**, which does those jobs well and has
+done for years: <https://www.nexusmods.com/eldenring/mods/428>
+
+We ship **none of it**. No code, no data, no config files -- v0.2 is a from-scratch,
+data-derived rebuild that shares nothing with it (see `PROVENANCE.md`). We link to the
+author's page rather than redistribute, which is what his terms ask for and what we would
+want ourselves.
+
+The two tools compose: matt's rewrites the game's files, ours touches none of them. See
+`ENEMY-AND-STARTING-CLASS-RANDOMIZATION.md` -- and note that item randomization must be OFF
+in matt's, because that part is ours.
+
+Separately, our research tooling uses **ESDLang** (also thefifthmatt) as a decompiler when
+deriving talk-ESD facts from a legitimately owned installation
+(`tools/datamine_esd_gates.py`, `tools/extract_questline_conditions.py`). We ship neither
+ESDLang nor any decompiled source -- only the derived fact tables those tools emit, each row
+carrying its own citation (see `PROVENANCE.md`, *Separately licensed questline evidence*).
+
+---
+
+*Elden Ring and Shadow of the Erdtree are trademarks of FromSoftware / Bandai
+Namco. This is an unofficial fan project and ships no game assets.*
