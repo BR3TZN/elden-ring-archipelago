@@ -1,0 +1,25 @@
+# Eigenen Slotnamen eintragen und die Datei in Archipelagos Players-Ordner legen.
+# Bei einem vorhandenen Slot nur die letzten fünf Optionen übernehmen.
+name: YourName
+game: Elden Ring
+
+Elden Ring:
+  enable_dlc: false
+  num_regions: 6
+  goal: auto
+  goal_great_runes: 4
+  enemy_scaling: true
+
+  traps:
+    - rune_thief
+    - no_flask
+    - blackout
+  spawn_traps:
+    - "4270" # Wächterlöwe
+    - "4290" # Bluthundritter
+  # 0 reserviert die Fallen für gezielte Zustellung durch den Raum-Admin.
+  # Ein positiver Wert verteilt Fallen zusätzlich als Füllitems im Seed.
+  trap_count: 0
+  trap_link: false
+  # Teilt auch reguläre Tode mit den anderen DeathLink-Slots.
+  death_link: true
