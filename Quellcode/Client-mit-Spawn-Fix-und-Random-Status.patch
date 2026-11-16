@@ -38,18 +38,10 @@ index 7d2a5dc..27c0135 100644
      // gates both the outbound broadcast and the inbound apply, so ARMED means the link is really
      // live rather than merely compiled in. The world declares this tag only when the option is on,
 diff --git a/crates/eldenring-archipelago/src/traps.rs b/crates/eldenring-archipelago/src/traps.rs
-index dccefee..fb4e98f 100644
+index dccefee..2afbb5f 100644
 --- a/crates/eldenring-archipelago/src/traps.rs
 +++ b/crates/eldenring-archipelago/src/traps.rs
-@@ -49,6 +49,7 @@ use std::time::Instant;
- use eldenring::cs::{
-     CSFade, ChrDebugSpawnRequest, ChrInsExt, SoloParamRepository, SpEffectParam, WorldChrMan,
- };
-+use eldenring::param::SP_EFFECT_PARAM_ST as SpEffectParamRow;
- use er_logic::safe_speffect_rows::TRAP_NO_FLASK;
- use er_logic::traps::{
-     NO_FLASK_CORRECT_RATE, NO_FLASK_SECONDS, RUNEBEAR_SPAWN, RuneThiefAction, SpawnSpec, Trap,
-@@ -126,6 +127,16 @@ fn count_live_npc_param(wcm: &WorldChrMan, npc_param_id: i32) -> u32 {
+@@ -126,6 +126,16 @@ fn count_live_npc_param(wcm: &WorldChrMan, npc_param_id: i32) -> u32 {
  /// arriving. Folding a half-delivered spawn back into the queue would make it eligible for the
  /// overdue warning and for re-firing, which is a different and worse bug than the one being fixed.
  static SPAWN_BURST: Mutex<Option<er_logic::spawn_burst::SpawnBurst>> = Mutex::new(None);
@@ -66,7 +58,7 @@ index dccefee..fb4e98f 100644
  
  /// Queue a trap that arrived as an AP item. Called from the receive loop, which knows the NAME.
  ///
-@@ -253,6 +264,7 @@ pub fn fire(trap: Trap) -> Option<Cow<'static, str>> {
+@@ -253,6 +263,7 @@ pub fn fire(trap: Trap) -> Option<Cow<'static, str>> {
          Trap::RuneThief => fire_rune_thief(),
          Trap::NoFlask => fire_no_flask(),
          Trap::Blackout => fire_blackout(),
@@ -74,14 +66,22 @@ index dccefee..fb4e98f 100644
          // The legacy variant is a `SpawnSpec` in everything but its name, so it goes down the same
          // path -- one spawn implementation, not two that can drift.
          Trap::Runebear => fire_spawn(RUNEBEAR_SPAWN),
-@@ -261,6 +273,74 @@ pub fn fire(trap: Trap) -> Option<Cow<'static, str>> {
+@@ -261,6 +272,31 @@ pub fn fire(trap: Trap) -> Option<Cow<'static, str>> {
      ok.then(|| trap.toast())
  }
  
 +fn fire_random_status() -> Option<Cow<'static, str>> {
-+    // Direct SpEffects need resist-point deltas. Attack-power fields are consumed on hit.
-+    const EFFECT_ID: i32 = 20_012_083;
-+    const BUILDUP: i32 = 10_000;
++    // Vanilla status proc rows from SpEffectParam. These carry the game's damage,
++    // duration and follow-up behavior without modifying the regulation at runtime.
++    const EFFECTS: [(&str, i32); 7] = [
++        ("Poison", 6500),
++        ("Scarlet Rot", 6600),
++        ("Blood Loss", 6400),
++        ("Frostbite", 6700),
++        ("Sleep", 6450),
++        ("Madness", 6750),
++        ("Death Blight", 70),
++    ];
 +
 +    let wcm = unsafe { WorldChrMan::instance_mut() }.ok()?;
 +    let player = wcm.main_player.as_mut()?;
@@ -89,67 +89,16 @@ index dccefee..fb4e98f 100644
 +        return None;
 +    }
 +
-+    let repo = unsafe { SoloParamRepository::instance_mut() }.ok()?;
-+    let row =
-+        crate::param_guard::get_mut::<SpEffectParam>(repo, EFFECT_ID as u32, "trap random_status")?;
-+    let statuses = [
-+        (
-+            "Poison",
-+            SpEffectParamRow::set_change_poison_resist_point as fn(&mut SpEffectParamRow, i32),
-+        ),
-+        (
-+            "Scarlet Rot",
-+            SpEffectParamRow::set_change_disease_resist_point,
-+        ),
-+        (
-+            "Blood Loss",
-+            SpEffectParamRow::set_change_blood_resist_point,
-+        ),
-+        (
-+            "Frostbite",
-+            SpEffectParamRow::set_change_freeze_resist_point,
-+        ),
-+        ("Sleep", SpEffectParamRow::set_change_sleep_resist_point),
-+        ("Madness", SpEffectParamRow::set_change_madness_resist_point),
-+        (
-+            "Death Blight",
-+            SpEffectParamRow::set_change_curse_resist_point,
-+        ),
-+    ];
-+    let (name, set_buildup) = statuses[rand::random_range(0..statuses.len())];
-+    for (_, reset_buildup) in statuses {
-+        reset_buildup(row, 0);
-+    }
-+    // Let the effect survive a game update, with no periodic pulse before it expires.
-+    row.set_effect_endurance(0.25);
-+    row.set_motion_interval(1.0);
-+    set_buildup(row, BUILDUP);
-+    if player
-+        .chr_ins
-+        .special_effect
-+        .entries()
-+        .any(|e| e.param_id == EFFECT_ID)
-+    {
-+        player.chr_ins.remove_speffect(EFFECT_ID);
-+    }
-+    player.chr_ins.apply_speffect(EFFECT_ID, false);
-+    if !player
-+        .chr_ins
-+        .special_effect
-+        .entries()
-+        .any(|e| e.param_id == EFFECT_ID)
-+    {
-+        log::warn!("trap random_status: game rejected SpEffect {EFFECT_ID} ({name})");
-+        return None;
-+    }
-+    log::info!("trap random_status: activated SpEffect {EFFECT_ID} for {name}");
++    let (name, effect_id) = EFFECTS[rand::random_range(0..EFFECTS.len())];
++    player.chr_ins.apply_speffect(effect_id, false);
++    log::info!("trap random_status: requested vanilla SpEffect {effect_id} ({name})");
 +    Some(Cow::Owned(format!("TRAP: Random Status -- {name}")))
 +}
 +
  fn fire_blackout() -> bool {
      if !fade_blackout(true) {
          log::info!("trap blackout: CSFade unavailable -- deferred");
-@@ -407,8 +487,8 @@ fn fire_spawn(spec: SpawnSpec) -> bool {
+@@ -407,8 +443,8 @@ fn fire_spawn(spec: SpawnSpec) -> bool {
      let now = now_ms();
      let mut burst = er_logic::spawn_burst::SpawnBurst::new(spec, baseline, now);
      // This tick's copy. The creator drains the slot before the next one is written.
@@ -160,7 +109,7 @@ index dccefee..fb4e98f 100644
      }
      log::info!(
          "trap spawn: c{} x{} opening -- npc={} think={} chara_init={} at ({}, {}, {}), {} already \
-@@ -530,7 +610,9 @@ fn drive_spawn_burst() -> bool {
+@@ -530,7 +566,9 @@ fn drive_spawn_burst() -> bool {
          pos_y: pos.1,
          pos_z: pos.2,
      };
