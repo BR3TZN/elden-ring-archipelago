@@ -387,3 +387,31 @@
 [2026-11-16 18:35:31.908] [mapforgoblins] [info] [SC2] creation=false canvas=true 3840x2160 healthy=true
 [2026-11-16 18:35:34.936] [mapforgoblins] [info] [SC2] creation=false canvas=true 3840x2160 healthy=true
 [2026-11-16 18:35:37.948] [mapforgoblins] [info] [SC2] creation=false canvas=true 3840x2160 healthy=true
+[2026-11-16 18:35:40.965] [mapforgoblins] [info] [SC2] creation=false canvas=true 3840x2160 healthy=true
+[2026-11-16 18:35:43.974] [mapforgoblins] [info] [SC2] creation=false canvas=true 3840x2160 healthy=true
+[2026-11-16 18:35:46.992] [mapforgoblins] [info] [SC2] creation=false canvas=true 3840x2160 healthy=true
+[2026-11-16 18:35:50.012] [mapforgoblins] [info] [SC2] creation=false canvas=true 3840x2160 healthy=true
+[2026-11-16 18:35:53.024] [mapforgoblins] [info] [SC2] creation=false canvas=true 3840x2160 healthy=true
+[2026-11-16 18:35:56.032] [mapforgoblins] [info] [SC2] creation=false canvas=true 3840x2160 healthy=true
+[2026-11-16 18:35:59.057] [mapforgoblins] [info] [SC2] creation=false canvas=true 3840x2160 healthy=true
+[2026-11-16 18:36:02.061] [mapforgoblins] [info] [SC2] creation=false canvas=true 3840x2160 healthy=true
+[2026-11-16 18:36:05.081] [mapforgoblins] [info] [SC2] creation=false canvas=true 3840x2160 healthy=true
+[2026-11-16 18:36:05.793] [mapforgoblins] [info] [SC2] [overlay-v2] NvAPI HDR the game's successful SET (OFF, disp=2147881090, out=\\.\DISPLAY1)
+[2026-11-16 18:36:08.102] [mapforgoblins] [info] [SC2] creation=false canvas=true 3840x2160 healthy=true
+[2026-11-16 18:36:11.125] [mapforgoblins] [info] [SC2] creation=false canvas=true 3840x2160 healthy=true
+[2026-11-16 18:36:14.141] [mapforgoblins] [info] [SC2] creation=false canvas=true 3840x2160 healthy=true
+[2026-11-16 18:36:17.160] [mapforgoblins] [info] [SC2] creation=false canvas=true 3840x2160 healthy=true
+[2026-11-16 18:36:17.267] [mapforgoblins] [info] [SC2] [overlay-v2] NvAPI HDR the game's successful SET (OFF, disp=2147881090, out=\\.\DISPLAY1)
+[2026-11-16 18:36:20.182] [mapforgoblins] [info] [SC2] creation=false canvas=true 3840x2160 healthy=true
+[2026-11-16 18:36:20.318] [mapforgoblins] [info] [SC2] [overlay-v2] NvAPI HDR the game's successful SET (OFF, disp=2147881090, out=\\.\DISPLAY1)
+[2026-11-16 18:36:23.193] [mapforgoblins] [info] [SC2] creation=false canvas=true 3840x2160 healthy=true
+[2026-11-16 18:36:26.213] [mapforgoblins] [info] [SC2] creation=false canvas=true 3840x2160 healthy=true
+[2026-11-16 18:36:27.837] [mapforgoblins] [info] [COLLECTED] flag-save table count has read 0 for 3 min with 2 tracked tile(s) loaded - expected for a character with nothing collected on an unloaded tile; otherwise the count at +0x189D0 is not where this exe keeps it
+[2026-11-16 18:36:29.226] [mapforgoblins] [info] [SC2] creation=false canvas=true 3840x2160 healthy=true
+[2026-11-16 18:36:32.239] [mapforgoblins] [info] [SC2] creation=false canvas=true 3840x2160 healthy=true
+[2026-11-16 18:36:35.259] [mapforgoblins] [info] [SC2] creation=false canvas=true 3840x2160 healthy=true
+[2026-11-16 18:36:38.276] [mapforgoblins] [info] [SC2] creation=false canvas=true 3840x2160 healthy=true
+[2026-11-16 18:36:41.286] [mapforgoblins] [info] [SC2] creation=false canvas=true 3840x2160 healthy=true
+[2026-11-16 18:36:44.296] [mapforgoblins] [info] [SC2] creation=false canvas=true 3840x2160 healthy=true
+[2026-11-16 18:36:47.324] [mapforgoblins] [info] [SC2] creation=false canvas=true 3840x2160 healthy=true
+[2026-11-16 18:36:50.329] [mapforgoblins] [info] [SC2] creation=false canvas=true 3840x2160 healthy=true
