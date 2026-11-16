@@ -38,7 +38,7 @@ index 7d2a5dc..27c0135 100644
      // gates both the outbound broadcast and the inbound apply, so ARMED means the link is really
      // live rather than merely compiled in. The world declares this tag only when the option is on,
 diff --git a/crates/eldenring-archipelago/src/traps.rs b/crates/eldenring-archipelago/src/traps.rs
-index dccefee..d3aa2ab 100644
+index dccefee..fb4e98f 100644
 --- a/crates/eldenring-archipelago/src/traps.rs
 +++ b/crates/eldenring-archipelago/src/traps.rs
 @@ -49,6 +49,7 @@ use std::time::Instant;
@@ -74,12 +74,12 @@ index dccefee..d3aa2ab 100644
          // The legacy variant is a `SpawnSpec` in everything but its name, so it goes down the same
          // path -- one spawn implementation, not two that can drift.
          Trap::Runebear => fire_spawn(RUNEBEAR_SPAWN),
-@@ -261,6 +273,44 @@ pub fn fire(trap: Trap) -> Option<Cow<'static, str>> {
+@@ -261,6 +273,74 @@ pub fn fire(trap: Trap) -> Option<Cow<'static, str>> {
      ok.then(|| trap.toast())
  }
  
 +fn fire_random_status() -> Option<Cow<'static, str>> {
-+    // This reserved SpEffect row carries buildup through the game's ordinary status processing.
++    // Direct SpEffects need resist-point deltas. Attack-power fields are consumed on hit.
 +    const EFFECT_ID: i32 = 20_012_083;
 +    const BUILDUP: i32 = 10_000;
 +
@@ -95,31 +95,61 @@ index dccefee..d3aa2ab 100644
 +    let statuses = [
 +        (
 +            "Poison",
-+            SpEffectParamRow::set_poizon_attack_power as fn(&mut SpEffectParamRow, i32),
++            SpEffectParamRow::set_change_poison_resist_point as fn(&mut SpEffectParamRow, i32),
 +        ),
-+        ("Scarlet Rot", SpEffectParamRow::set_disease_attack_power),
-+        ("Blood Loss", SpEffectParamRow::set_blood_attack_power),
-+        ("Frostbite", SpEffectParamRow::set_freeze_attack_power),
-+        ("Sleep", SpEffectParamRow::set_sleep_attack_power),
-+        ("Madness", SpEffectParamRow::set_madness_attack_power),
-+        ("Death Blight", SpEffectParamRow::set_curse_attack_power),
++        (
++            "Scarlet Rot",
++            SpEffectParamRow::set_change_disease_resist_point,
++        ),
++        (
++            "Blood Loss",
++            SpEffectParamRow::set_change_blood_resist_point,
++        ),
++        (
++            "Frostbite",
++            SpEffectParamRow::set_change_freeze_resist_point,
++        ),
++        ("Sleep", SpEffectParamRow::set_change_sleep_resist_point),
++        ("Madness", SpEffectParamRow::set_change_madness_resist_point),
++        (
++            "Death Blight",
++            SpEffectParamRow::set_change_curse_resist_point,
++        ),
 +    ];
 +    let (name, set_buildup) = statuses[rand::random_range(0..statuses.len())];
 +    for (_, reset_buildup) in statuses {
 +        reset_buildup(row, 0);
 +    }
-+    row.set_effect_endurance(0.0);
++    // Let the effect survive a game update, with no periodic pulse before it expires.
++    row.set_effect_endurance(0.25);
++    row.set_motion_interval(1.0);
 +    set_buildup(row, BUILDUP);
-+    player.chr_ins.remove_speffect(EFFECT_ID);
-+    player.chr_ins.apply_speffect(EFFECT_ID, true);
-+    log::info!("trap random_status: applied {name} buildup");
++    if player
++        .chr_ins
++        .special_effect
++        .entries()
++        .any(|e| e.param_id == EFFECT_ID)
++    {
++        player.chr_ins.remove_speffect(EFFECT_ID);
++    }
++    player.chr_ins.apply_speffect(EFFECT_ID, false);
++    if !player
++        .chr_ins
++        .special_effect
++        .entries()
++        .any(|e| e.param_id == EFFECT_ID)
++    {
++        log::warn!("trap random_status: game rejected SpEffect {EFFECT_ID} ({name})");
++        return None;
++    }
++    log::info!("trap random_status: activated SpEffect {EFFECT_ID} for {name}");
 +    Some(Cow::Owned(format!("TRAP: Random Status -- {name}")))
 +}
 +
  fn fire_blackout() -> bool {
      if !fade_blackout(true) {
          log::info!("trap blackout: CSFade unavailable -- deferred");
-@@ -407,8 +457,8 @@ fn fire_spawn(spec: SpawnSpec) -> bool {
+@@ -407,8 +487,8 @@ fn fire_spawn(spec: SpawnSpec) -> bool {
      let now = now_ms();
      let mut burst = er_logic::spawn_burst::SpawnBurst::new(spec, baseline, now);
      // This tick's copy. The creator drains the slot before the next one is written.
@@ -130,7 +160,7 @@ index dccefee..d3aa2ab 100644
      }
      log::info!(
          "trap spawn: c{} x{} opening -- npc={} think={} chara_init={} at ({}, {}, {}), {} already \
-@@ -530,7 +580,9 @@ fn drive_spawn_burst() -> bool {
+@@ -530,7 +610,9 @@ fn drive_spawn_burst() -> bool {
          pos_y: pos.1,
          pos_z: pos.2,
      };
