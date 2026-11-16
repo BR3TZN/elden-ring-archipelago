@@ -1,2 +1,19 @@
-me3\logs
-me3\log
+# Local AP connection and received-item state
+/me3/apconfig.json*
+/me3/ap_save_*.json*
+/me3/reconcile.json*
+
+# Local logs, backups and generated saves
+/me3/log/
+/me3/logs/
+/me3/*.log
+/me3/*.bak
+/me3/*.bak-*
+/me3/.er-updater-backup-*/
+/me3/.er-ap-flower-backups/
+*.sl2
+*.sl2.bak
+*.co2
+*.co2.bak
+*.apsave
+*.archipelago
