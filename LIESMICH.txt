@@ -6,7 +6,8 @@ Installation
 2. In Archipelago 0.6.8 die bisherige Elden-Ring-APWorld durch die beiliegende
    eldenring.apworld ersetzen. Im AP-Launcher geht das über „Install APWorld“.
 3. Die vorhandene eldenring_archipelago.dll neben deiner gestarteten ap.me3
-   sichern. Dann die DLL aus dem Ordner me3 dieses Pakets dorthin kopieren.
+   sichern. Für den Status-Fix die separat bereitgestellte, neu gebaute DLL
+   dorthin kopieren. Die DLL im Ordner me3 stammt vom älteren Build.
 4. Mit der neuen APWorld einen Raum generieren. Die beiliegende
    EldenRing-CharityRoyale.yaml enthält random_status bereits.
 
@@ -21,8 +22,8 @@ Auslösung
 
 Bei jedem Auslösen wählt der Client einen von sieben Effekten mit gleicher
 Wahrscheinlichkeit: Gift, Scharlachfäule, Blutung, Frost, Schlaf,
-Wahnsinn oder Todespest. Der Client gibt einmalig genug Aufbau für eine
-sofortige Auslösung an das Spiel weiter. Todespest ist tödlich.
+Wahnsinn oder Todespest. Der Client übergibt den ausgewählten Statuseffekt direkt an das Spiel.
+Todespest ist tödlich.
 
 Prüfstand
 Die Windows-x64-DLL wurde kompiliert und ihr Importverzeichnis geprüft.
