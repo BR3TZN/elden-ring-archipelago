@@ -1,0 +1,39 @@
+Elden Ring Archipelago 1.0.2.1 – Random Status
+Windows x64, auf Basis des Peliarch-Clients mit Spawn-Fix
+
+Installation
+1. Elden Ring und den Archipelago-Client schließen.
+2. In Archipelago 0.6.8 die bisherige Elden-Ring-APWorld durch die beiliegende
+   eldenring.apworld ersetzen. Im AP-Launcher geht das über „Install APWorld“.
+3. Die vorhandene eldenring_archipelago.dll neben deiner gestarteten ap.me3
+   sichern. Dann die DLL aus dem Ordner me3 dieses Pakets dorthin kopieren.
+4. Mit der neuen APWorld einen Raum generieren. Die beiliegende
+   EldenRing-CharityRoyale.yaml enthält random_status bereits.
+
+Auslösung
+- Für gezielte Auslösung trap_count: 0 verwenden. In AP Chaos Bridge lautet
+  der exakte Itemname Trap: Random Status. Den richtigen Elden-Ring-Slot wählen.
+- Zum manuellen Test in der AP-Hostkonsole eingeben:
+  /send Slotname Trap: Random Status
+- Für Zufallsfunde random_status in die traps-Liste aufnehmen und trap_count
+  auf einen positiven Wert setzen. Sind weitere Fallentypen aktiv, teilen
+  sie sich die eingestellte Anzahl.
+
+Bei jedem Auslösen wählt der Client einen von sieben Effekten mit gleicher
+Wahrscheinlichkeit: Gift, Scharlachfäule, Blutung, Frost, Schlaf,
+Wahnsinn oder Todespest. Der Client gibt einmalig genug Aufbau für eine
+sofortige Auslösung an das Spiel weiter. Todespest ist tödlich.
+
+Prüfstand
+Die Windows-x64-DLL wurde kompiliert und ihr Importverzeichnis geprüft.
+1.602 Rust-Logiktests wurden bestanden. Archipelago 0.6.8 konnte einen
+Seed mit drei platzierten Statusfallen und einen ohne Platzierung erzeugen.
+Die Effekte wurden noch nicht in Elden Ring live getestet.
+
+Quellen
+Peliarch-Client 1.0.2.1, öffentlicher Quellstand bee99e81621e8ec0d2318eed4c5b3a9e229d1d14
+https://git.peliarch.ca/alaric/from-software-archipelago-clients-public
+Ausgangspaket und Spawn-Fix
+https://github.com/BR3TZN/elden-ring-archipelago/tree/7984fd5
+SpEffectParam-Referenz
+https://github.com/vawser/Smithbox

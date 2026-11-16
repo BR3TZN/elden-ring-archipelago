@@ -1,0 +1,2 @@
+e14dba674a0c9e6de2ab3cbf45e35c715a67a725abbafd11a2c271444cf9c979  eldenring.apworld
+57f6f9f0a32f1bd2ab606f1692d63c8b9095f037b5a1ae89757a02629a1ae770  me3/eldenring_archipelago.dll
